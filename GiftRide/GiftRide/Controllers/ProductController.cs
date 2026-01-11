@@ -1,0 +1,298 @@
+﻿using GiftRide.Core.Contracts;
+using GiftRide.Infrastructure.Data;
+using GiftRide.Infrastructure.Data.Entities;
+using GiftRide.Models.Product;
+using GiftRide.Models.Validity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
+using static System.Net.WebRequestMethods;
+
+namespace GiftRide.Controllers
+{
+    [Authorize(Roles = "Administrator")]
+    public class ProductController : Controller
+    {
+        private readonly IProductService _productService;
+        private readonly ICategoryService _categoryService;
+        private readonly IValidityService _validityService;
+        private readonly ApplicationDbContext _context;
+
+
+        public ProductController(IProductService productService, ICategoryService categoryService,
+            IValidityService validityService, ApplicationDbContext context)
+        {
+            this._productService = productService;
+            this._categoryService = categoryService;
+            this._validityService = validityService;
+            this._context = context;
+        }
+
+
+        // GET: ProductController
+        [AllowAnonymous]
+        public ActionResult Index(string searchStringCategoryName, string searchStringValidityName, string sort)
+        {
+            List<ProductIndexVM> products = _productService.GetProducts(searchStringCategoryName, searchStringValidityName)
+                 .Select(product => new ProductIndexVM
+                 {
+                     Id = product.Id,
+                     ProductName = product.ProductName,
+                     
+                     ValidityId = product.ValidityId,
+                     ValidityName = product.Validity.ValidityName,
+                     CategoryId = product.CategoryId,
+                     CategoryName = product.Category.CategoryName,
+                     Picture = product.Picture,
+                     Quantity = product.Quantity,
+                     Price = product.Price,
+                     Discount = product.Discount
+
+
+                 }).ToList();
+
+            switch (sort)
+            {
+                case "name_asc":
+                    products = products.OrderBy(p => p.ProductName).ToList();
+                    break;
+
+                case "name_desc":
+                    products = products.OrderByDescending(p => p.ProductName).ToList();
+                    break;
+
+                case "price_asc":
+                    products = products.OrderBy(p => p.Price).ToList();
+                    break;
+
+                case "price_desc":
+                    products = products.OrderByDescending(p => p.Price).ToList();
+                    break;
+            }
+
+
+            return this.View(products);
+        }
+
+        // GET: ProductController/Details/5
+        [AllowAnonymous]
+        public ActionResult Details(int id)
+        {
+            Product item = _productService.GetProductById(id);
+            if (item == null)
+            {
+                return NotFound();
+            }
+            ProductDetailsVM product = new ProductDetailsVM()
+            {
+                Id = item.Id,
+                ProductName = item.ProductName,
+                Description = item.Description,
+                ValidityId = item.ValidityId,
+                ValidityName = item.Validity.ValidityName,
+                CategoryId = item.CategoryId,
+                CategoryName = item.Category.CategoryName,
+                Picture = item.Picture,
+                Quantity = item.Quantity,
+                Price = item.Price,
+                Discount = item.Discount
+            };
+            return this.View(product);
+        }
+
+        // GET: ProductController/Create
+        public ActionResult Create()
+        {
+            var product = new ProductCreateVM();
+            product.Validities = _validityService.GetValidities()
+                .Select(x => new Models.Validity.ValidityPairVM()
+                {
+                    Id = x.Id,
+                    Name = x.ValidityName
+                }).ToList();
+            product.Categories = _categoryService.GetCategories()
+                .Select(x => new Models.Category.CategoryPairVM()
+                {
+                    Id = x.Id,
+                    Name = x.CategoryName
+                }).ToList();
+            return View(product);
+
+
+        }
+
+        // POST: ProductController/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([FromForm] ProductCreateVM product)
+        {
+            if (ModelState.IsValid)
+            {
+                var createdId = _productService.Create(product.ProductName,product.Description, product.ValidityId,
+                    product.CategoryId, product.Picture, product.Quantity, product.Price, product.Discount);
+                if (createdId)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            //            // 2. КРИТИЧНИЯТ ПРОБЛЕМ (Dropdown списъците)
+            //            В методите Create(POST) и Edit(POST), ако ModelState.IsValid върне false(например ако си забравил да напишеш име на продукт),
+            //            кодът отива най - долу на return View(product);.
+
+            //             Проблемът: В този момент списъците product.Validities и product.Categories са NULL(защото HTTP заявката не ги помни).
+            //             Това ще хвърли грешка в браузъра(NullReferenceException), когато се опита да зареди страницата отново.
+
+            // --- ВАЖНО: АКО ИМА ГРЕШКА, ПРЕЗАРЕЖДАМЕ СПИСЪЦИТЕ ---
+
+            product.Validities = _validityService.GetValidities()
+            .Select(x => new Models.Validity.ValidityPairVM 
+            { Id = x.Id, Name = x.ValidityName })
+            .ToList();
+
+
+
+
+            product.Categories = _categoryService.GetCategories()
+                .Select(x => new Models.Category.CategoryPairVM 
+                { Id = x.Id, Name = x.CategoryName }).
+                ToList();
+            return View();
+        }
+
+        // GET: ProductController/Edit/5
+        public ActionResult Edit(int id)
+        {
+            Product product = _productService.GetProductById(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            ProductEditVM updateProduct = new ProductEditVM()
+            {
+                Id = product.Id,
+                ProductName = product.ProductName,
+                Description = product.Description,
+                ValidityId = product.ValidityId,
+                //ValidityName = product.Validity.ValidityName,
+                CategoryId = product.CategoryId,
+                //CategoryName = product.Category.CategoryName,
+                Picture = product.Picture,
+                Quantity = product.Quantity,
+                Price = product.Price,
+                Discount = product.Discount
+            };
+            updateProduct.Validities = _validityService.GetValidities()
+                .Select(b => new ValidityPairVM()
+                {
+                    Id = b.Id,
+                    Name = b.ValidityName
+
+                }).ToList();
+            updateProduct.Categories = _categoryService.GetCategories()
+                .Select(c => new Models.Category.CategoryPairVM()
+                {
+                    Id = c.Id,
+                    Name = c.CategoryName
+                }).ToList();
+            return View(updateProduct);
+        }
+
+        // POST: ProductController/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(int id, ProductEditVM product)
+        {
+            if (ModelState.IsValid)
+            {
+                var updated = _productService.Update(id, product.ProductName, product.Description,
+                    product.ValidityId, product.CategoryId, product.Picture,
+                    product.Quantity, product.Price, product.Discount);
+                if (updated)
+                {
+                    return this.RedirectToAction("Index");
+                }
+            }
+
+            //            // 2. КРИТИЧНИЯТ ПРОБЛЕМ (Dropdown списъците)
+            //            В методите Create(POST) и Edit(POST), ако ModelState.IsValid върне false(например ако си забравил да напишеш име на продукт),
+            //            кодът отива най - долу на return View(product);.
+
+            //             Проблемът: В този момент списъците product.Validities и product.Categories са NULL(защото HTTP заявката не ги помни).
+            //             Това ще хвърли грешка в браузъра(NullReferenceException), когато се опита да зареди страницата отново.
+
+
+            // --- ВАЖНО: ПРЕЗАРЕЖДАМЕ СПИСЪЦИТЕ И ТУК ---
+            product.Validities = _validityService.GetValidities()
+                .Select(b => new Models.Validity.ValidityPairVM()
+                {
+                    Id = b.Id,
+                    Name = b.ValidityName
+                }).ToList();
+
+            product.Categories = _categoryService.GetCategories()
+                .Select(c => new Models.Category.CategoryPairVM()
+                {
+                    Id = c.Id,
+                    Name = c.CategoryName
+                }).ToList();
+
+            return View(product);
+
+        }
+            
+        
+
+        // GET: ProductController/Delete/5
+        public ActionResult Delete(int id)
+        {
+            Product item = _productService.GetProductById(id);
+            if (item == null)
+            {
+                return NotFound();
+            }
+            ProductDeleteVM product = new ProductDeleteVM()
+            {
+                Id = item.Id,
+                ProductName = item.ProductName,
+                Description = item.Description,
+                ValidityId = item.ValidityId,
+                ValidityName = item.Validity.ValidityName,
+                CategoryId = item.CategoryId,
+                CategoryName = item.Category.CategoryName,
+                Picture = item.Picture,
+                Quantity = item.Quantity,
+                Price = item.Price,
+                Discount = item.Discount
+
+
+            };
+            return View(product);
+
+
+
+        }
+
+        // POST: ProductController/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id, IFormCollection collection)
+        {
+            var deleted = _productService.RemoveById(id);
+            if (deleted)
+            {
+                return this.RedirectToAction("Success");
+            }
+            else
+            {
+                return View();
+            }
+
+        }
+
+        public IActionResult Success()
+        {
+            return View();
+        }
+    }
+}

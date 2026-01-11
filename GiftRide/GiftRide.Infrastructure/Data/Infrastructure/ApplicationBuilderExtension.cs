@@ -90,9 +90,9 @@ namespace GiftRide.Infrastructure.Data.Infrastructure
             }
             dataValidity.Validities.AddRange(new[]
             {
-                new Validity {ValidityName="3 месеца"},
-                new Validity {ValidityName="6 месеца"},
-                new Validity {ValidityName="12 месеца"}
+                new Validity {ValidityName="Валидност: 3 месеца", MonthsCount = 3},
+                new Validity {ValidityName="Валидност: 6 месеца", MonthsCount = 6},
+                new Validity {ValidityName="Валидност: 12 месеца", MonthsCount = 12}
             });
             dataValidity.SaveChanges();
         }

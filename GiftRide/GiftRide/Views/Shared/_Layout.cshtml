@@ -29,6 +29,44 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Products</a>
                         </li>
 
+                        @if (this.User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="MyOrders">My Orders</a>
+                            </li>
+                            <a asp-controller="Cart" asp-action="Index" class="nav-link">
+                                🛒 Cart
+                            </a>
+
+                        }
+
+                        @if (this.User.Identity.IsAuthenticated)
+                        {
+
+                            <a asp-controller="Favorites" asp-action="Index" class="nav-link">
+                                ❤️ Favorites
+                            </a>
+
+                        }
+
+
+                        <li class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                                    data-bs-toggle="dropdown" aria-expanded="false" style="margin-right: 10px; margin-left: 5px">
+                                Categories
+                            </button>
+
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <li><a class="dropdown-item" asp-controller="Product" asp-action="Index" asp-route-searchStringCategoryName="Въздушни">Въздушни</a></li>
+                                <li><a class="dropdown-item" asp-controller="Product" asp-action="Index" asp-route-searchStringCategoryName="Водни">Водни</a></li>
+                                <li><a class="dropdown-item" asp-controller="Product" asp-action="Index" asp-route-searchStringCategoryName="Зимни">Зимни</a></li>
+                                <li><a class="dropdown-item" asp-controller="Product" asp-action="Index" asp-route-searchStringCategoryName="Офроуд и Моторни">Офроуд и Моторни</a></li>
+                                <li><a class="dropdown-item" asp-controller="Product" asp-action="Index" asp-route-searchStringCategoryName="Спорт и Природа">Спорт и Природа</a></li>
+                                
+
+
+                            </ul>
+                        </li>
 
 
                         @if ((this.User.Identity.IsAuthenticated) && (this.User.IsInRole("Administrator")))
@@ -42,7 +80,7 @@
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                     <li><a class="dropdown-item" href="/Client/Index">Clients</a></li>
                                     <li><a class="dropdown-item" href="/Order/Index">Orders</a></li>
-                                    @* <li><a class="dropdown-item" href="/Statistic/Index">Statistic</a></li> *@
+                                    <li><a class="dropdown-item" href="/Statistic/Index">Statistic</a></li> 
                                 </ul>
                             </li>
                         }
