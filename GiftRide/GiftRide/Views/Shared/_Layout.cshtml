@@ -8,6 +8,108 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/GiftRide.styles.css" asp-append-version="true" />
 </head>
+
+
+<style>
+    :root {
+        --gift-teal: #2dd4bf;
+        --gift-blue: #0ea5e9;
+        --admin-dark: #334155;
+        --ride-orange: #f43f5e;
+    }
+
+    /* ОБЩ СТИЛ ЗА БУТОНИТЕ */
+    .btn-nav-custom {
+        border: none;
+        color: white !important;
+        font-weight: 600;
+        padding: 10px 20px;
+        border-radius: 30px;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-categories {
+        background: linear-gradient(135deg, var(--gift-teal), var(--gift-blue));
+    }
+
+    .btn-admin {
+        background: linear-gradient(135deg, var(--admin-dark), #1e293b);
+    }
+
+    .btn-nav-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        filter: brightness(1.1);
+    }
+
+    /* Анимация на стрелката */
+    .dropdown-toggle::after {
+        transition: transform 0.3s ease;
+    }
+
+    .show.dropdown .dropdown-toggle::after {
+        transform: rotate(180deg);
+    }
+
+    /* ПАДАЩО МЕНЮ */
+    .custom-dropdown-menu {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        padding: 10px;
+        min-width: 240px;
+        margin-top: 10px !important;
+    }
+
+    /* АНИМАЦИЯ ПРИ ПОЯВЯВАНЕ */
+    @@keyframes fadeInSlide {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .dropdown.show .custom-dropdown-menu {
+        display: block;
+        animation: fadeInSlide 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    /* ЕЛЕМЕНТИ В МЕНЮТО */
+    .custom-dropdown-item {
+        border-radius: 8px;
+        padding: 10px 15px;
+        color: #475569;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+    }
+
+        .custom-dropdown-item:hover {
+            background-color: #f1f5f9;
+            color: var(--gift-blue);
+            transform: translateX(5px);
+        }
+
+    /* Админ ховър */
+    .admin-item:hover {
+        color: var(--ride-orange) !important;
+        background-color: #fff1f2;
+    }
+</style>
+
+
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -53,40 +155,71 @@
                         }
 
 
-                        <li class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                        <div class="d-flex align-items-center">
+
+                        <li class="nav-item dropdown" style="list-style: none;">
+                            <button class="btn btn-nav-custom btn-categories dropdown-toggle" type="button" id="categoriesMenu"
                                     data-bs-toggle="dropdown" aria-expanded="false" style="margin-right: 10px; margin-left: 5px">
-                                Categories
+                                <i class="bi bi-grid-fill"></i> Categories
                             </button>
 
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <li><a class="dropdown-item" asp-controller="Product" asp-action="Index" asp-route-searchStringCategoryName="Въздушни">Въздушни</a></li>
-                                <li><a class="dropdown-item" asp-controller="Product" asp-action="Index" asp-route-searchStringCategoryName="Водни">Водни</a></li>
-                                <li><a class="dropdown-item" asp-controller="Product" asp-action="Index" asp-route-searchStringCategoryName="Зимни">Зимни</a></li>
-                                <li><a class="dropdown-item" asp-controller="Product" asp-action="Index" asp-route-searchStringCategoryName="Офроуд и Моторни">Офроуд и Моторни</a></li>
-                                <li><a class="dropdown-item" asp-controller="Product" asp-action="Index" asp-route-searchStringCategoryName="Спорт и Природа">Спорт и Природа</a></li>
-                                
-
-
+                            <ul class="dropdown-menu custom-dropdown-menu" aria-labelledby="categoriesMenu">
+                                <li>
+                                    <a class="custom-dropdown-item" asp-controller="Product" asp-action="Index" asp-route-searchStringCategoryName="Въздушни">
+                                        <i class="bi bi-cloud-arrow-up-fill"></i> Въздушни
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="custom-dropdown-item" asp-controller="Product" asp-action="Index" asp-route-searchStringCategoryName="Водни">
+                                        <i class="bi bi-water"></i> Водни
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="custom-dropdown-item" asp-controller="Product" asp-action="Index" asp-route-searchStringCategoryName="Зимни">
+                                        <i class="bi bi-snow"></i> Зимни
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="custom-dropdown-item" asp-controller="Product" asp-action="Index" asp-route-searchStringCategoryName="Офроуд и Моторни">
+                                        <i class="bi bi-truck-flatbed"></i> Офроуд и Моторни
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="custom-dropdown-item" asp-controller="Product" asp-action="Index" asp-route-searchStringCategoryName="Спорт и Природа">
+                                        <i class="bi bi-tree-fill"></i> Спорт и Природа
+                                    </a>
+                                </li>
                             </ul>
                         </li>
 
-
                         @if ((this.User.Identity.IsAuthenticated) && (this.User.IsInRole("Administrator")))
                         {
-                            <li class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                            <li class="nav-item dropdown" style="list-style: none;">
+                                <button class="btn btn-nav-custom btn-admin dropdown-toggle" type="button" id="adminMenu"
                                         data-bs-toggle="dropdown" aria-expanded="false">
-                                    Statistic Modul
+                                    <i class="bi bi-shield-lock-fill"></i> Statistic Modul
                                 </button>
 
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                    <li><a class="dropdown-item" href="/Client/Index">Clients</a></li>
-                                    <li><a class="dropdown-item" href="/Order/Index">Orders</a></li>
-                                    <li><a class="dropdown-item" href="/Statistic/Index">Statistic</a></li> 
+                                <ul class="dropdown-menu custom-dropdown-menu" aria-labelledby="adminMenu">
+                                    <li>
+                                        <a class="custom-dropdown-item admin-item" href="/Client/Index">
+                                            <i class="bi bi-people-fill"></i> Clients
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="custom-dropdown-item admin-item" href="/Order/Index">
+                                            <i class="bi bi-cart-check-fill"></i> Orders
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="custom-dropdown-item admin-item" href="/Statistic/Index">
+                                            <i class="bi bi-bar-chart-line-fill"></i> Statistics
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                         }
+                </div>
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
