@@ -1,6 +1,133 @@
 ﻿@{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "Политика за поверителност";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<style>
+    .privacy-wrapper {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #333;
+        line-height: 1.6;
+    }
+
+    .privacy-header {
+        margin-bottom: 40px;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 20px;
+    }
+
+    .privacy-section {
+        margin-bottom: 30px;
+    }
+
+        .privacy-section h2 {
+            font-size: 1.5rem;
+            color: #0d6efd; /* Основният син цвят или var(--gift-teal) ако искаш да пасне на темата */
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .privacy-section ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+            .privacy-section ul li {
+                position: relative;
+                padding-left: 25px;
+                margin-bottom: 10px;
+            }
+
+                .privacy-section ul li::before {
+                    content: "•";
+                    color: #0d6efd;
+                    font-weight: bold;
+                    position: absolute;
+                    left: 0;
+                }
+</style>
+
+<div class="container py-5 privacy-wrapper">
+
+    <div class="privacy-header text-center">
+        <h1 class="fw-bold display-5">Политика за поверителност</h1>
+        
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+
+            <p class="lead mb-5 text-center">
+                Ние в <strong>GiftRide</strong> ценим вашето доверие и се ангажираме да защитаваме личната ви информация. Тази политика обяснява как събираме, използваме и съхраняваме вашите данни.
+            </p>
+
+            <div class="privacy-section">
+                <h2>1. Каква информация събираме?</h2>
+                <p>За да обработим вашите поръчки и да ви предоставим качествено обслужване, ние събираме следните данни:</p>
+                <ul>
+                    <li><strong>Лична информация:</strong> Име, фамилия, телефонен номер и имейл адрес.</li>                   
+                    <li><strong>История на поръчките:</strong> Информация за продуктите, които сте закупили от нас.</li>
+                </ul>
+            </div>
+
+            <div class="privacy-section">
+                <h2>2. За какво използваме вашите данни?</h2>
+                <p>Ние използваме предоставената от вас информация единствено за следните цели:</p>
+                <ul>
+                    <li>Обработка и изпращане на вашите поръчки.</li>
+                    <li>Комуникация с вас относно статуса на доставката.</li>
+                    <li>Издаване на счетоводни документи (фактури).</li>
+                    <li>Подобряване на функционалността на нашия уебсайт.</li>
+                </ul>
+            </div>
+
+            <div class="privacy-section">
+                <h2>3. Споделяне на информация с трети страни</h2>
+                <p>Ние <strong>не продаваме</strong> и не предоставяме вашите лични данни на трети страни с маркетингова цел. Данните ви могат да бъдат предоставени само на:</p>
+                <ul>
+                    <li><strong>Куриерски фирми</strong> (напр. Еконт, Спиди) с цел извършване на доставката.</li>
+                    <li>Държавни органи, когато това се изисква по закон.</li>
+                </ul>
+            </div>
+
+            <div class="privacy-section">
+                <h2>4. Сигурност на данните</h2>
+                <p>
+                    Ние взимаме сериозни мерки за защита на вашата информация. Нашият уебсайт използва <strong>SSL сертификат</strong> (криптирана връзка), който гарантира, че данните, които въвеждате (пароли, лични данни), се предават сигурно.
+                </p>
+            </div>
+
+            <div class="privacy-section">
+                <h2>5. Бисквитки (Cookies)</h2>
+                <p>
+                    Нашият сайт използва "бисквитки", за да подобри вашето преживяване (например, за да помни какво имате в количката). Можете да забраните бисквитките от настройките на вашия браузър, но това може да ограничи функционалността на сайта.
+                </p>
+            </div>
+
+            <div class="privacy-section">
+                <h2>6. Вашите права</h2>
+                <p>Вие имате право по всяко време да:</p>
+                <ul>
+                    <li>Поискате достъп до данните, които съхраняваме за вас.</li>
+                    <li>Поискате корекция на грешни данни.</li>
+                    <li>Поискате изтриване на вашия профил и лични данни ("Правото да бъдеш забравен").</li>
+                </ul>
+            </div>
+
+            <div class="privacy-section">
+                <h2>Свържете се с нас</h2>
+                <p>
+                    Ако имате въпроси относно нашата политика за поверителност, моля, не се колебайте да се свържете с нас на имейл:
+                    <a href="mailto:privacy@giftride.bg" class="text-decoration-none fw-bold">privacy@giftride.bg</a>.
+                </p>
+            </div>
+
+            <hr class="my-5" />
+
+            <div class="alert alert-secondary text-center small">
+                <strong>Важно:</strong> Този уебсайт е разработен с учебна цел и е част от портфолио.
+                Всички продукти, цени и условия са примерни.
+            </div>
+
+        </div>
+    </div>
+</div>
