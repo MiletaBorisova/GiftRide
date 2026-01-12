@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using GiftRide.Models;
+using GiftRide.Models.Contact;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GiftRide.Controllers
@@ -16,6 +17,30 @@ namespace GiftRide.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        // GET
+        [HttpGet]
+        public IActionResult Contacts()
+        {
+            return View(new ContactFormVM());
+        }
+
+        // POST
+        [HttpPost]
+        public IActionResult Contacts(ContactFormVM model)
+        {
+            
+            if (!ModelState.IsValid)
+            {
+                TempData["ErrorMessage"] = $"Формата не е попълнена!";
+                return View(model);
+            }
+
+            
+            TempData["SuccessMessage"] = $"Благодарим ви, {model.Name}! Вашето съобщение е получено.";            
+            
+            return RedirectToAction("Contacts");
         }
 
         public IActionResult Privacy()

@@ -15,11 +15,13 @@ namespace GiftRide.Controllers
     {
         private readonly IProductService _productService;
         private readonly IOrderService _orderService;
+        private readonly ICartService _cartService;
 
-        public OrderController(IProductService productService, IOrderService orderService)
+        public OrderController(IProductService productService, IOrderService orderService, ICartService cartService)
         {
             _productService = productService;
             _orderService = orderService;
+            _cartService = cartService;
         }
 
 
@@ -177,10 +179,10 @@ namespace GiftRide.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> CreateFromCart(ICartService cartService)
+        public async Task<IActionResult> CreateFromCart()
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var cart = await cartService.GetCartByUserIdAsync(userId);
+            var cart = await _cartService.GetCartByUserIdAsync(userId);
 
             if (!cart.Items.Any())
                 return RedirectToAction("Index", "Cart");
@@ -193,7 +195,7 @@ namespace GiftRide.Controllers
             }
 
 
-            await cartService.ResetCartAsync(userId);
+            await _cartService.ResetCartAsync(userId);
 
             return RedirectToAction("Success", "Order");
         }
