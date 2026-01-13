@@ -145,18 +145,18 @@ namespace GiftRide.Controllers
 
             // --- ВАЖНО: АКО ИМА ГРЕШКА, ПРЕЗАРЕЖДАМЕ СПИСЪЦИТЕ ---
 
-            product.Validities = _validityService.GetValidities()
-            .Select(x => new Models.Validity.ValidityPairVM 
-            { Id = x.Id, Name = x.ValidityName })
-            .ToList();
+            //product.Validities = _validityService.GetValidities()
+            //.Select(x => new Models.Validity.ValidityPairVM 
+            //{ Id = x.Id, Name = x.ValidityName })
+            //.ToList();
 
 
 
 
-            product.Categories = _categoryService.GetCategories()
-                .Select(x => new Models.Category.CategoryPairVM 
-                { Id = x.Id, Name = x.CategoryName }).
-                ToList();
+            //product.Categories = _categoryService.GetCategories()
+            //    .Select(x => new Models.Category.CategoryPairVM 
+            //    { Id = x.Id, Name = x.CategoryName }).
+            //    ToList();
             return View();
         }
 
@@ -223,19 +223,19 @@ namespace GiftRide.Controllers
 
 
             // --- ВАЖНО: ПРЕЗАРЕЖДАМЕ СПИСЪЦИТЕ И ТУК ---
-            product.Validities = _validityService.GetValidities()
-                .Select(b => new Models.Validity.ValidityPairVM()
-                {
-                    Id = b.Id,
-                    Name = b.ValidityName
-                }).ToList();
+            //product.Validities = _validityService.GetValidities()
+            //    .Select(b => new Models.Validity.ValidityPairVM()
+            //    {
+            //        Id = b.Id,
+            //        Name = b.ValidityName
+            //    }).ToList();
 
-            product.Categories = _categoryService.GetCategories()
-                .Select(c => new Models.Category.CategoryPairVM()
-                {
-                    Id = c.Id,
-                    Name = c.CategoryName
-                }).ToList();
+            //product.Categories = _categoryService.GetCategories()
+            //    .Select(c => new Models.Category.CategoryPairVM()
+            //    {
+            //        Id = c.Id,
+            //        Name = c.CategoryName
+            //    }).ToList();
 
             return View(product);
 

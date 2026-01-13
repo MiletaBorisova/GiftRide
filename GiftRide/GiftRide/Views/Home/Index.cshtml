@@ -2,7 +2,214 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    /* ГЛАВЕН БАНЕР (HERO) */
+    
+    .hero-section {
+        position: relative;
+        height: 85vh;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: white; /* Текстът остава бял */
+        /* ВАЖНО: Този цвят се вижда "зад" прозрачното видео.
+               Тъй като текстът е бял, избираме ЧЕРНО. Така видеото става тъмно и текстът се чете. */
+        background-color: #000;
+        /* Това изрязва видеото, за да спазва заоблените ъгли и да не цапа бялото отстрани */
+        border-radius: 0 0 50px 50px;
+        overflow: hidden;
+        margin-top: 20px;
+    }
+
+    .hero-video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Запълва формата идеално */
+        /* ТУК РЕГУЛИРАШ ПРОЗРАЧНОСТТА */
+        opacity: 0.5; /* 0.3 е много тъмно, 0.7 е по-светло. 0.5 е златна среда. */
+
+        z-index: 1; /* Най-отзад */
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2; /* Текстът е НАД видеото */
+    }
+
+        /* Стиловете за текста си остават същите */
+        .hero-content h1 {
+            font-size: 4.5rem;
+            font-weight: 850;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            line-height: 1;
+            margin-bottom: 20px;
+        }
+
+            .hero-content h1 span {
+                background: linear-gradient(to right, var(--gift-teal), var(--gift-blue));
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+
+
+
+    /* МОДЕРНИ КАРТИ ЗА КАТЕГОРИИ */
+    .cat-card {
+        border: none;
+        border-radius: 25px;
+        overflow: hidden;
+        position: relative;
+        height: 300px;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        cursor: pointer;
+    }
+
+        .cat-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s;
+        }
+
+    .cat-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 20px;
+        background: linear-gradient(transparent, rgba(0,0,0,0.8));
+        color: white;
+    }
+
+    .cat-card:hover {
+        transform: translateY(-15px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+
+        .cat-card:hover img {
+            transform: scale(1.1);
+        }
+
+    /* СЕКЦИЯ С ПРЕДИМСТВА (STATISTICS) */
+    .feature-box {
+        padding: 40px;
+        text-align: center;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        transition: 0.3s;
+    }
+
+        .feature-box i {
+            font-size: 3rem;
+            background: linear-gradient(135deg, var(--gift-teal), var(--ride-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+</style>
+
+<div class="hero-section animate-box">
+    <video autoplay muted loop playsinline class="hero-video">
+        <source src="~/videos/GiftRideVideo.mp4" type="video/mp4">
+    </video>
+
+    <div class="hero-content">
+        <h1 class="display-1">Подари <span>Приключение</span></h1>
+        <p class="lead fs-3 mb-5">Най-добрите подаръци не са предмети, а спомени.</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a asp-controller="Product" asp-action="Index" class="btn btn-nav-custom btn-categories p-3 px-5 fs-5">
+                Виж преживяванията
+            </a>
+            <a asp-controller="Home" asp-action="Contacts" class="btn btn-outline-light rounded-pill p-3 px-5 fs-5 fw-bold">
+                Свържи се с нас
+            </a>
+        </div>
+    </div>
 </div>
+
+<div class="container mt-5 pt-5">
+    <div class="row mb-5 text-center">
+        <div class="col-md-4 mb-4">
+            <div class="feature-box h-100">
+                <i class="bi bi-lightning-charge-fill"></i>
+                <h3 class="fw-bold">Бърза доставка</h3>
+                <p class="text-muted">Вземи своя ваучер веднага по имейл или в луксозна кутия.</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="feature-box h-100">
+                <i class="bi bi-trophy-fill"></i>
+                <h3 class="fw-bold">Топ качество</h3>
+                <p class="text-muted">Работим само с най-добрите инструктори и обекти.</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="feature-box h-100">
+                <i class="bi bi-gift-fill"></i>
+                <h3 class="fw-bold">Готов за подарък</h3>
+                <p class="text-muted">Всеки ваучер пристига с персонално послание и в стилна опаковка, готова за Вашия празник.</p>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="fw-bold text-center mb-5 display-4">Открий своята <span style="color: var(--ride-orange)">стихия</span></h2>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="cat-card">
+                <img src="~/pictures/AirAdventures.jpg" alt="Air">
+                <div class="cat-overlay">
+                    <h3 class="fw-bold">Въздушни</h3>
+                    <p>Скокове с парашут, полети с делтапланер и балон.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="cat-card">
+                <img src="~/pictures/WaterAdventures.jpg" alt="Water">
+                <div class="cat-overlay">
+                    <h3 class="fw-bold">Водни</h3>
+                    <p>Джет, рафтинг, гмуркане и ветроходство.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="cat-card">
+                <img src="~/pictures/OffroadAdventures.jpg" alt="Offroad">
+                <div class="cat-overlay">
+                    <h3 class="fw-bold">Офроуд</h3>
+                    <p>АТВ, Бъги и 4х4 приключения.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<script>
+        // Прост скрипт за анимация при скрол
+    const observerOptions = {
+        threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate__animated', 'animate__fadeInUp');
+                entry.target.style.opacity = "1";
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.cat-card, .feature-box').forEach(el => {
+        el.style.opacity = "0";
+        observer.observe(el);
+    });
+</script>
+
