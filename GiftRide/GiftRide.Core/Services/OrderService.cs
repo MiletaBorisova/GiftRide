@@ -52,6 +52,7 @@ namespace GiftRide.Core.Services
             this._context.Products.Update(product);
             this._context.Orders.Add(item);
 
+            //suzdavat se vaucherite
             int months = 3; 
             if (product.Validity != null)
             {
@@ -64,7 +65,7 @@ namespace GiftRide.Core.Services
                 var voucher = new Voucher
                 {
                     Product = product,
-                    Order = item, // Свързваме го с поръчката
+                    Order = item, // Svurzva se s poruchkata
                     PurchaseDate = DateTime.Now,
                     ExpiryDate = DateTime.Now.AddMonths(months),
                     Status = ReservationStatus.None
@@ -75,16 +76,21 @@ namespace GiftRide.Core.Services
             return _context.SaveChanges() != 0;
         }
 
-       
+
         public List<Order> GetOrders()
         {
-            return _context.Orders.OrderByDescending(x => x.OrderDate).ToList();
+            return _context.Orders
+                .Include(x => x.Product)  
+                .Include(x => x.User)     
+                .Include(x => x.Vouchers) 
+                .OrderByDescending(x => x.OrderDate)
+                .ToList();
         }
         public List<Order> GetOrdersByUser(string userId)
         {
             return _context.Orders
-                     .Include(x => x.Vouchers) // <--- ДОБАВИ ТОВА: Зарежда ваучерите към поръчката
-                     .ThenInclude(v => v.Product) // Опционално, ако ти трябва инфо за продукта във ваучера
+                     .Include(x => x.Vouchers) //Zarejda vaucherite kum poruchkata
+                     .ThenInclude(v => v.Product) 
                      .Where(x => x.UserId == userId)
                      .OrderByDescending(x => x.OrderDate)
                      .ToList();

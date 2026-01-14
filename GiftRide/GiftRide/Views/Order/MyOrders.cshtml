@@ -7,7 +7,7 @@
 
 <div class="container py-5">
     <div class="d-flex align-items-center mb-4">
-        <h1 class="fw-bold text-dark me-3">📦 Моите Поръчки</h1>
+        <h1 class="fw-bold text-dark me-3">Моите Поръчки</h1>
         <span class="badge bg-light text-dark border rounded-pill">@Model.Count() поръчки</span>
     </div>
 
@@ -49,12 +49,14 @@
                                     <span class="fw-bold text-dark d-block" style="font-size: 1.05rem;">
                                         @Html.DisplayFor(modelItem => item.Product)
                                     </span>
+
                                     @if (item.Discount > 0)
                                     {
                                         <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill mt-1">
                                             -@item.Discount% отстъпка
                                         </span>
                                     }
+
                                 </td>
 
                                 <td>
@@ -74,9 +76,9 @@
 
                                 <td class="text-center">
 
-                                    <p class="text-danger">DEBUG: VoucherId = @item.VoucherId</p>
+                                   
 
-                                    @* СЛУЧАЙ 1: НЯМА РЕЗЕРВАЦИЯ -> БУТОН *@
+                                    @*Ako niama rezervacia *@
                                     @if (item.Status == ReservationStatus.None)
                                     {
                                         <a asp-controller="Reservation" asp-action="Create" asp-route-id="@item.VoucherId"
@@ -89,7 +91,7 @@
                                     }
                                    
 
-                                    @* СЛУЧАЙ 2: ЧАКАЩА -> ЖЪЛТО *@
+                                    @*Pending*@
                                     else if (item.Status == ReservationStatus.Pending)
                                     {
                                         <div class="d-inline-block">
@@ -105,7 +107,7 @@
                                         </div>
                                     }
 
-                                    @* СЛУЧАЙ 3: ПОТВЪРДЕНА -> ЗЕЛЕНО *@
+                                    @*Approved*@
                                     else if (item.Status == ReservationStatus.Approved)
                                     {
                                         <div class="d-inline-block">
@@ -121,7 +123,7 @@
                                         </div>
                                     }
 
-                                    @* СЛУЧАЙ 4: ОТКАЗАНА -> ЧЕРВЕНО + БУТОН *@
+                                    @*Rejected*@
                                     else if (item.Status == ReservationStatus.Rejected)
                                     {
                                         <div class="d-inline-block">
@@ -149,7 +151,7 @@
 </div>
 
 <style>
-    /* Малък ефект при минаване с мишката върху бутона */
+    
     .btn-hover-effect:hover {
         transform: translateY(-2px);
         box-shadow: 0 5px 15px rgba(14, 165, 233, 0.3) !important;

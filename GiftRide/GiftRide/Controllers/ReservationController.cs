@@ -21,50 +21,46 @@ namespace GiftRide.Controllers
             _userManager = userManager;
         }
 
-        // GET: Отваря календара
+        // GET: Otvaria se kalendara
         [HttpGet]
         public async Task<IActionResult> Create(int id)
         {
-            // 1. Проверка за валидно ID (ако е 0, значи OrderController не е подал ваучер)
-            if (id <= 0)
-            {
-                TempData["Error"] = "Невалиден ваучер.";
-                return RedirectToAction("MyOrders", "Order");
-            }
-
             var user = await _userManager.GetUserAsync(User);
-            var voucher = _reservationService.GetVoucherForReservation(id, user.Id);
 
-            if (voucher == null)
+            Voucher voucher = null;
+            if (id > 0)
             {
-                TempData["Error"] = "Ваучерът не е намерен или не е ваш.";
-                return RedirectToAction("MyOrders", "Order");
+                voucher = _reservationService.GetVoucherForReservation(id, user.Id);
             }
 
-            if (voucher.ExpiryDate < DateTime.Now)
+            
+            if (voucher != null && voucher.ExpiryDate >= DateTime.Now)
             {
-                TempData["Error"] = "Ваучерът е изтекъл!";
-                return RedirectToAction("MyOrders", "Order");
+                
+                ViewBag.MinDate = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
+                ViewBag.MaxDate = voucher.ExpiryDate.ToString("yyyy-MM-dd");
+
+                return View(voucher);
             }
 
-            // Настройки за календара (да не може да избира минали дати)
-            ViewBag.MinDate = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
-            ViewBag.MaxDate = voucher.ExpiryDate.ToString("yyyy-MM-dd");
-
-            return View(voucher);
+            
+            TempData["Error"] = "Ваучерът е невалиден или срокът му е изтекъл.";
+            return RedirectToAction("MyOrders", "Order");
         }
 
-        // POST: Записва резервацията
+        // POST
         [HttpPost]
         public async Task<IActionResult> ConfirmReservation(int voucherId, DateTime reservationDate)
         {
-            var user = await _userManager.GetUserAsync(User);
+          
 
             if (reservationDate <= DateTime.Now)
             {
                 TempData["Error"] = "Моля, изберете валидна бъдеща дата.";
-                return RedirectToAction("Create", new { id = voucherId });
+                return RedirectToAction("Create", "Reservation");
             }
+
+            var user = await _userManager.GetUserAsync(User);
 
             bool success = _reservationService.MakeReservation(voucherId, reservationDate, user.Id);
 
@@ -76,8 +72,30 @@ namespace GiftRide.Controllers
             else
             {
                 TempData["Error"] = "Грешка при резервацията. Проверете датата.";
-                return RedirectToAction("Create", new { id = voucherId });
+                return RedirectToAction("Create", "Reservation");
             }
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Administrator")]
+        public IActionResult UpdateStatus(int voucherId, int statusId)
+        {
+            // Preobrazuva se chisloto kum enum-a za ReservationStatus
+            ReservationStatus newStatus = (ReservationStatus)statusId;
+
+            bool result = _reservationService.ChangeStatus(voucherId, newStatus);
+
+            if (result)
+            {
+                TempData["Success"] = "Статусът е променен успешно!";
+            }
+            else
+            {
+                TempData["Error"] = "Възникна грешка при промяната.";
+            }
+
+            
+            return RedirectToAction("Index", "Order");
         }
     }
 }

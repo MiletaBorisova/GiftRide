@@ -62,5 +62,15 @@ namespace GiftRide.Core.Services
             
             return _context.SaveChanges() > 0;
         }
+
+        public bool ChangeStatus(int voucherId, ReservationStatus newStatus)
+        {
+            var voucher = _context.Vouchers.Find(voucherId);
+            if (voucher == null) return false;
+
+            voucher.Status = newStatus;
+            _context.SaveChanges();
+            return true;
+        }
     }
 }

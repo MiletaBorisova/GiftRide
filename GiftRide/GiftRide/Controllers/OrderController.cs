@@ -35,23 +35,30 @@ namespace GiftRide.Controllers
         {
             //string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             //var user = context.Users.SingleOrDefault(u => u.Id == userId);
+            var ordersList = _orderService.GetOrders();
 
-            List<OrderIndexVM> orders = _orderService.GetOrders()
-                .Select(x => new OrderIndexVM
+            List<OrderIndexVM> orders = ordersList
+                .Select(x => 
                 {
-                    Id = x.Id,
-                    OrderDate = x.OrderDate.ToString("dd-MMM-yyyy hh:mm", CultureInfo.InvariantCulture),
-                    UserId = x.UserId,
-                    User = x.User.UserName,
-                    ProductId = x.ProductId,
-                    Product = x.Product.ProductName,
-                    Picture = x.Product.Picture,
-                    Quantity = x.Quantity,
-                    Price = x.Price,
-                    Discount = x.Discount,
-                    TotalPrice = x.TotalPrice,
+                    var voucher = x.Vouchers.FirstOrDefault();
+                    return new OrderIndexVM
+                    {
+                        Id = x.Id,
+                        OrderDate = x.OrderDate.ToString("dd-MMM-yyyy hh:mm", CultureInfo.InvariantCulture),
+                        UserId = x.UserId,
+                        User = x.User.UserName,
+                        ProductId = x.ProductId,
+                        Product = x.Product.ProductName,
+                        Picture = x.Product.Picture,
+                        Quantity = x.Quantity,
+                        Price = x.Price,
+                        Discount = x.Discount,
+                        TotalPrice = x.TotalPrice,
+                        VoucherId = (voucher != null) ? voucher.Id : 0,
+                        Status = (voucher != null) ? voucher.Status : ReservationStatus.None,
+                        ReservationDate = (voucher != null) ? voucher.ReservationDate : null
 
-
+                    };
                 }).ToList();
 
             return View(orders);
@@ -65,19 +72,20 @@ namespace GiftRide.Controllers
 
             var model = orders.Select(o =>
             {
-                // Взимаме първия ваучер от списъка (защото UI-ът ти показва 1 ред за поръчка)
+                // Vziama se purvia vaucher ot spisuka
                 var voucher = o.Vouchers.FirstOrDefault();
 
                 return new OrderIndexVM
                 {
-                    Id = o.Id, // Предполагам, че имаш Id в Order entity
+                    Id = o.Id, 
                     OrderDate = o.OrderDate.ToString("dd.MM.yyyy"),
                     Product = o.Product.ProductName,
                     Picture = o.Product?.Picture,
+                    Discount = o.Discount,
                     Quantity = o.Quantity,
                     Price = o.TotalPrice,
 
-                    // ТУК Е МАГИЯТА ЗА БУТОНА:
+                    
                     // Ако има ваучер, взимаме неговото ID, ако не - 0
                     VoucherId = voucher?.Id ?? 0,
                     VoucherCode = voucher?.VoucherCode,

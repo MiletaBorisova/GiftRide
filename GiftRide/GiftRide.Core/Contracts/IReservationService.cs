@@ -6,6 +6,7 @@ namespace GiftRide.Core.Contracts
     {
         Voucher GetVoucherForReservation(int voucherId, string userId);
         bool MakeReservation(int voucherId, DateTime date, string userId);
+        bool ChangeStatus(int voucherId, ReservationStatus newStatus);
 
     }
 }
