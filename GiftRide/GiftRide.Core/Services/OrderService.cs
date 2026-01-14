@@ -1,6 +1,7 @@
 ﻿using GiftRide.Core.Contracts;
 using GiftRide.Infrastructure.Data;
 using GiftRide.Infrastructure.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,9 @@ namespace GiftRide.Core.Services
 
         public bool Create(int productId, string userId, int quantity)
         {
-            var product = this._context.Products.SingleOrDefault(x => x.Id == productId);
+            var product = this._context.Products
+                .Include(p => p.Validity)
+                .SingleOrDefault(x => x.Id == productId);
 
             if (product == null) return false;
 
@@ -49,6 +52,26 @@ namespace GiftRide.Core.Services
             this._context.Products.Update(product);
             this._context.Orders.Add(item);
 
+            int months = 3; 
+            if (product.Validity != null)
+            {
+                var digits = new String(product.Validity.ValidityName.Where(Char.IsDigit).ToArray());
+                if (!string.IsNullOrEmpty(digits)) months = int.Parse(digits);
+            }
+
+            for (int i = 0; i < quantity; i++)
+            {
+                var voucher = new Voucher
+                {
+                    Product = product,
+                    Order = item, // Свързваме го с поръчката
+                    PurchaseDate = DateTime.Now,
+                    ExpiryDate = DateTime.Now.AddMonths(months),
+                    Status = ReservationStatus.None
+                };
+                this._context.Vouchers.Add(voucher);
+            }
+
             return _context.SaveChanges() != 0;
         }
 
@@ -57,17 +80,21 @@ namespace GiftRide.Core.Services
         {
             return _context.Orders.OrderByDescending(x => x.OrderDate).ToList();
         }
-
         public List<Order> GetOrdersByUser(string userId)
         {
-            return _context.Orders.Where(x => x.UserId == userId)
-                 .OrderByDescending(x => x.OrderDate)
-                 .ToList();
+            return _context.Orders
+                     .Include(x => x.Vouchers) // <--- ДОБАВИ ТОВА: Зарежда ваучерите към поръчката
+                     .ThenInclude(v => v.Product) // Опционално, ако ти трябва инфо за продукта във ваучера
+                     .Where(x => x.UserId == userId)
+                     .OrderByDescending(x => x.OrderDate)
+                     .ToList();
         }
 
         public bool CreateFromCartItem(CartItem cartItem, string userId, decimal promoDiscountPercent)
         {
-            var product = _context.Products.FirstOrDefault(p => p.Id == cartItem.ProductId);
+            var product = _context.Products
+                .Include(p => p.Validity)
+                .FirstOrDefault(p => p.Id == cartItem.ProductId);
             if (product == null) return false;
 
             //discount zadaden ot create
@@ -101,6 +128,27 @@ namespace GiftRide.Core.Services
 
             _context.Orders.Add(order);
             _context.Products.Update(product);
+
+            //suzdavat se vaucherite
+            int months = 3;
+            if (product.Validity != null)
+            {
+                var digits = new String(product.Validity.ValidityName.Where(Char.IsDigit).ToArray());
+                if (!string.IsNullOrEmpty(digits)) months = int.Parse(digits);
+            }
+
+            for (int i = 0; i < cartItem.Quantity; i++)
+            {
+                var voucher = new Voucher
+                {
+                    Product = product,
+                    Order = order,
+                    PurchaseDate = DateTime.Now,
+                    ExpiryDate = DateTime.Now.AddMonths(months),
+                    Status = ReservationStatus.None
+                };
+                this._context.Vouchers.Add(voucher);
+            }
 
             return _context.SaveChanges() > 0;
         }

@@ -1,0 +1,40 @@
+﻿@using GiftRide.Infrastructure.Data.Entities
+@model Voucher
+
+@{
+    ViewData["Title"] = "Резервация";
+}
+
+<div class="container py-5">
+    <div class="card shadow border-0 col-md-6 mx-auto">
+        <div class="card-header bg-white text-center">
+            <h3>📅 Избери дата за: @Model.Product.ProductName</h3>
+        </div>
+        <div class="card-body">
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger">@TempData["Error"]</div>
+            }
+
+            <form asp-controller="Reservation" asp-action="ConfirmReservation" method="post">
+
+                <input type="hidden" name="voucherId" value="@Model.Id" />
+
+                <div class="mb-3">
+                    <label class="form-label">Дата на посещение:</label>
+                    <input type="date" class="form-control"
+                           name="reservationDate"
+                           min="@ViewBag.MinDate"
+                           max="@ViewBag.MaxDate"
+                           required />
+                    <small class="text-muted">Валидност до: @Model.ExpiryDate.ToString("dd.MM.yyyy")</small>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary btn-lg">Потвърди</button>
+                    <a asp-controller="Order" asp-action="MyOrders" class="btn btn-light">Отказ</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

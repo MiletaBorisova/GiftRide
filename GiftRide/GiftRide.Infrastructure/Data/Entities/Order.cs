@@ -24,5 +24,7 @@ namespace GiftRide.Infrastructure.Data.Entities
         public decimal Price { get; set; }
         public decimal Discount { get; set; }
         public decimal TotalPrice { get; set; }
+
+        public virtual ICollection<Voucher> Vouchers { get; set; } = new List<Voucher>();
     }
 }

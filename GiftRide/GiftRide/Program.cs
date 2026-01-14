@@ -42,6 +42,7 @@ namespace GiftRide
             builder.Services.AddTransient<ICartService, CartService>();
             builder.Services.AddTransient<IStatisticService, StatisticService>();
             builder.Services.AddTransient<IFavoriteService, FavoriteService>();
+            builder.Services.AddScoped<IReservationService, ReservationService>();
 
 
             var app = builder.Build();

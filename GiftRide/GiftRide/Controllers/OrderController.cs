@@ -4,6 +4,7 @@ using GiftRide.Models.Order;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using System.Security.Claims;
@@ -16,12 +17,15 @@ namespace GiftRide.Controllers
         private readonly IProductService _productService;
         private readonly IOrderService _orderService;
         private readonly ICartService _cartService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public OrderController(IProductService productService, IOrderService orderService, ICartService cartService)
+
+        public OrderController(IProductService productService, IOrderService orderService, ICartService cartService, UserManager<ApplicationUser> userManager)
         {
             _productService = productService;
             _orderService = orderService;
             _cartService = cartService;
+            _userManager = userManager;
         }
 
 
@@ -54,27 +58,38 @@ namespace GiftRide.Controllers
 
         }
 
-        public ActionResult MyOrders()
+        public async Task<IActionResult> MyOrders()
         {
-            string currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            //var user = context.Users.SingleOrDefault(u => u.Id == userId);
+            var userId = _userManager.GetUserId(User);
+            var orders = _orderService.GetOrdersByUser(userId);
 
-            List<OrderIndexVM> orders = _orderService.GetOrdersByUser(currentUserId)
-                .Select(x => new OrderIndexVM
+            var model = orders.Select(o =>
+            {
+                // Взимаме първия ваучер от списъка (защото UI-ът ти показва 1 ред за поръчка)
+                var voucher = o.Vouchers.FirstOrDefault();
+
+                return new OrderIndexVM
                 {
-                    Id = x.Id,
-                    OrderDate = x.OrderDate.ToString("dd-MMM-yyyy hh:mm", CultureInfo.InvariantCulture),
-                    UserId = x.UserId,
-                    User = x.User.UserName,
-                    ProductId = x.ProductId,
-                    Product = x.Product.ProductName,
-                    Picture = x.Product.Picture,
-                    Quantity = x.Quantity,
-                    Price = x.Price,
-                    Discount = x.Discount,
-                    TotalPrice = x.TotalPrice,
-                }).ToList();
-            return View(orders);
+                    Id = o.Id, // Предполагам, че имаш Id в Order entity
+                    OrderDate = o.OrderDate.ToString("dd.MM.yyyy"),
+                    Product = o.Product != null ? o.Product.ProductName : "Unknown",
+                    Picture = o.Product != null ? o.Product.Picture : "",
+                    Quantity = o.Quantity,
+                    Price = o.TotalPrice,
+
+                    // ТУК Е МАГИЯТА ЗА БУТОНА:
+                    // Ако има ваучер, взимаме неговото ID, ако не - 0
+                    VoucherId = voucher != null ? voucher.Id : 0,
+
+                    // Взимаме статуса от ваучера
+                    Status = voucher != null ? voucher.Status : ReservationStatus.None,
+
+                    // За да показваш датата, ако е резервиран
+                    ReservationDate = voucher?.ReservationDate
+                };
+            }).ToList();
+
+            return View(model);
         }
 
         // GET: OrderController/Details/5

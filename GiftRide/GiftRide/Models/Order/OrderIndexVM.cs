@@ -1,4 +1,7 @@
-﻿namespace GiftRide.Models.Order
+﻿using GiftRide.Controllers;
+using GiftRide.Infrastructure.Data.Entities;
+
+namespace GiftRide.Models.Order
 {
     public class OrderIndexVM
     {
@@ -15,5 +18,9 @@
         public decimal Price { get; set; }
         public decimal Discount { get; set; }
         public decimal TotalPrice { get; set; }
+
+        public int VoucherId { get; set; }
+        public ReservationStatus Status { get; set; }
+        public DateTime? ReservationDate { get; set; }
     }
 }
