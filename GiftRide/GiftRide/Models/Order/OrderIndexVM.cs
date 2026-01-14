@@ -20,6 +20,7 @@ namespace GiftRide.Models.Order
         public decimal TotalPrice { get; set; }
 
         public int VoucherId { get; set; }
+        public string? VoucherCode { get; set; }
         public ReservationStatus Status { get; set; }
         public DateTime? ReservationDate { get; set; }
     }

@@ -74,6 +74,8 @@
 
                                 <td class="text-center">
 
+                                    <p class="text-danger">DEBUG: VoucherId = @item.VoucherId</p>
+
                                     @* СЛУЧАЙ 1: НЯМА РЕЗЕРВАЦИЯ -> БУТОН *@
                                     @if (item.Status == ReservationStatus.None)
                                     {
@@ -135,10 +137,7 @@
                                         </div>
                                     }
 
-                                    <a asp-controller="Reservation" asp-action="Create" asp-route-id="@item.VoucherId">
-
-                                        <i class="bi bi-calendar-plus me-1"></i> Резервирай
-                                    </a>
+                                  
                                 </td>
                             </tr>
                         }

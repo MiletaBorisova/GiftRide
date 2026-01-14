@@ -72,17 +72,18 @@ namespace GiftRide.Controllers
                 {
                     Id = o.Id, // Предполагам, че имаш Id в Order entity
                     OrderDate = o.OrderDate.ToString("dd.MM.yyyy"),
-                    Product = o.Product != null ? o.Product.ProductName : "Unknown",
-                    Picture = o.Product != null ? o.Product.Picture : "",
+                    Product = o.Product.ProductName,
+                    Picture = o.Product?.Picture,
                     Quantity = o.Quantity,
                     Price = o.TotalPrice,
 
                     // ТУК Е МАГИЯТА ЗА БУТОНА:
                     // Ако има ваучер, взимаме неговото ID, ако не - 0
-                    VoucherId = voucher != null ? voucher.Id : 0,
+                    VoucherId = voucher?.Id ?? 0,
+                    VoucherCode = voucher?.VoucherCode,
 
                     // Взимаме статуса от ваучера
-                    Status = voucher != null ? voucher.Status : ReservationStatus.None,
+                    Status = voucher?.Status ?? ReservationStatus.None,
 
                     // За да показваш датата, ако е резервиран
                     ReservationDate = voucher?.ReservationDate

@@ -37,7 +37,7 @@ namespace GiftRide.Infrastructure.Data
             //Could not create constraint or index.See previous errors.
             builder.Entity<Voucher>()
                 .HasOne(v => v.Order)
-                .WithMany()
+                .WithMany(o => o.Vouchers)
                 .HasForeignKey(v => v.OrderId)
                 .OnDelete(DeleteBehavior.Restrict);
 
