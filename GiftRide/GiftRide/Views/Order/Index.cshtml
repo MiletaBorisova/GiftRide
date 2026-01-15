@@ -5,7 +5,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>All Orders</h1>
+<h1>Всички поръчки</h1>
 
 <table class="table table-hover align-middle">
     <thead class="table-light">
@@ -34,21 +34,21 @@
                          alt="Image" width="80" class="rounded shadow-sm" />
                 </td>
                 <td>@Html.DisplayFor(modelItem => item.Quantity)</td>
-                <td>@Html.DisplayFor(modelItem => item.Price)</td>
-                <td>@Html.DisplayFor(modelItem => item.Discount)</td>
-                <td class="fw-bold">@Html.DisplayFor(modelItem => item.TotalPrice)</td>
+                <td>@Html.DisplayFor(modelItem => item.Price)€</td>
+                <td>@Html.DisplayFor(modelItem => item.Discount)%</td>
+                <td class="fw-bold">@Html.DisplayFor(modelItem => item.TotalPrice)€</td>
 
                 <td class="text-center">
                     @if (item.Status == ReservationStatus.None)
                     {
-                        @* Случай 1: Няма резервация *@
-                        <span class="badge bg-secondary rounded-pill">No Reservation</span>
+                       
+                        <span class="badge bg-secondary rounded-pill">Няма резервация</span>
                     }
                     else
                     {
-                        @* Случай 2: Има резервация - показваме дата и опции *@
+                       
                         <div class="mb-2 small fw-bold text-muted">
-                            📅 @(item.ReservationDate.HasValue? item.ReservationDate.Value.ToString("dd.MM.yyyy") : "-")
+                            За @(item.ReservationDate.HasValue? item.ReservationDate.Value.ToString("dd.MM.yyyy") : "-")
                         </div>
 
                         <form asp-controller="Reservation" asp-action="UpdateStatus" method="post">
@@ -61,9 +61,9 @@
                             onchange="this.form.submit()"
                             style="cursor: pointer;">
 
-                                <option value="1" selected="@(item.Status == ReservationStatus.Pending)">⏳ Pending</option>
-                                <option value="2" selected="@(item.Status == ReservationStatus.Approved)">✅ Approve</option>
-                                <option value="3" selected="@(item.Status == ReservationStatus.Rejected)">❌ Reject</option>
+                                <option value="1" selected="@(item.Status == ReservationStatus.Pending)">⏳ Чакаща одобрение</option>
+                                <option value="2" selected="@(item.Status == ReservationStatus.Approved)">✅ Одобрена</option>
+                                <option value="3" selected="@(item.Status == ReservationStatus.Rejected)">❌ Отказана</option>
                             </select>
                         </form>
                                 }

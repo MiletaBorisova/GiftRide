@@ -1,119 +1,203 @@
 ﻿@model GiftRide.Infrastructure.Data.Entities.Cart
 
-<div class="container my-5">
-    <h2>Моята количка</h2>
+@{
+    ViewData["Title"] = "Cart";
+}
+
+<div class="container py-5">
+    <div class="d-flex align-items-center mb-4">
+        <h2 class="fw-bold m-0">🛒 Моята количка</h2>
+        @if (Model.Items != null && Model.Items.Any())
+        {
+            <span class="badge bg-light text-dark border ms-3 rounded-pill">@Model.Items.Count() продукта</span>
+        }
+    </div>
 
     @if (Model.Items == null || !Model.Items.Any())
     {
-        <p>Количката е празна.</p>
+        
+        <div class="text-center py-5 bg-light rounded-4 border-0 shadow-sm">
+            <div class="mb-3">
+                <i class="bi bi-cart-x display-1 text-muted opacity-50"></i>
+            </div>
+            <h3 class="fw-bold text-muted">Количката е празна</h3>
+            <p class="text-muted mb-4">Изглежда все още не сте избрали приключения.</p>
+            <a asp-controller="Product" asp-action="Index" class="btn btn-primary btn-lg rounded-pill px-5 shadow-sm">
+                Избери Приключение
+            </a>
+        </div>
     }
     else
     {
-        <table class="table align-middle">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Продукт</th>
-                    <th>Цена</th>
-                    <th>Количество</th>
-                    <th>Общо</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
+        <div class="row g-4">
+
+            
+            <div class="col-lg-8">
                 @foreach (var item in Model.Items)
                 {
-                    <tr>
-                        <td>
-                            <img src="@item.Product.Picture"
-                                 alt="@item.Product.ProductName"
-                                 style="width:80px; height:auto; object-fit:contain;" />
-                        </td>
-                        <td><strong>@item.Product.ProductName</strong></td>
-                        <td>@item.Price.ToString("0.00") лв.</td>
-                        <td>
-                            <div class="d-flex align-items-center gap-2">
-                                <a asp-action="DecreaseQuantity"
-                                   asp-route-productId="@item.ProductId"
-                                   class="btn btn-outline-secondary btn-sm">−</a>
-                                <span class="fw-bold">@item.Quantity</span>
-                                <a asp-action="IncreaseQuantity"
-                                   asp-route-productId="@item.ProductId"
-                                   class="btn btn-outline-secondary btn-sm">+</a>
+                    <div class="card border-0 shadow-sm rounded-4 mb-3 overflow-hidden position-relative hover-shadow transition-all">
+                        <div class="card-body p-3">
+                            <div class="row align-items-center g-3">
+
+                               
+                                <div class="col-4 col-md-2">
+                                    <div class="ratio ratio-1x1 rounded-3 overflow-hidden bg-white border">
+                                        <img src="@item.Product.Picture"
+                                             alt="@item.Product.ProductName"
+                                             style="object-fit: cover;">
+                                    </div>
+                                </div>
+
+                               
+                                <div class="col-8 col-md-4">
+                                    <h6 class="fw-bold text-dark mb-1">@item.Product.ProductName</h6>
+                                    <p class="text-muted small mb-0">Ед. цена: @item.Price.ToString("0.00") €</p>
+                                </div>
+
+                                
+                                <div class="col-6 col-md-3">
+                                    <div class="input-group input-group-sm border rounded-pill overflow-hidden" style="max-width: 120px;">
+                                        <a asp-action="DecreaseQuantity"
+                                           asp-route-productId="@item.ProductId"
+                                           class="btn btn-light border-end px-3">−</a>
+
+                                        <div class="form-control text-center bg-white border-0 fw-bold px-0">
+                                            @item.Quantity
+                                        </div>
+
+                                        <a asp-action="IncreaseQuantity"
+                                           asp-route-productId="@item.ProductId"
+                                           class="btn btn-light border-start px-3">+</a>
+                                    </div>
+                                </div>
+
+                               
+                                <div class="col-6 col-md-3 text-end">
+                                    <div class="fw-bold fs-5 text-primary mb-1">
+                                        @((item.Price * item.Quantity).ToString("0.00")) €
+                                    </div>
+                                    <a asp-action="Remove"
+                                       asp-route-productId="@item.ProductId"
+                                       class="btn btn-link text-danger p-0 text-decoration-none small">
+                                        <i class="bi bi-trash3"></i> Премахни
+                                    </a>
+                                </div>
                             </div>
-                        </td>
-                        <td>
-                            <strong>@((item.Price * item.Quantity).ToString("0.00")) лв.</strong>
-                        </td>
-                        <td>
-                            <a asp-action="Remove"
-                               asp-route-productId="@item.ProductId"
-                               class="btn btn-danger btn-sm">🗑</a>
-                        </td>
-                    </tr>
+                        </div>
+                    </div>
                 }
-            </tbody>
-        </table>
-
-        
-        <form asp-action="ApplyPromoCode" method="post" class="mb-3">
-            <div class="input-group">
-                <input name="code"
-                       class="form-control"
-                       placeholder="Промо код"
-                       value="@(TempData["AppliedPromoCode"] ?? "")" />
-                <button class="btn btn-outline-primary">Приложи</button>
             </div>
-        </form>
 
-        @if (TempData["PromoError"] != null)
-        {
-            <div class="text-danger mb-3">@TempData["PromoError"]</div>
-        }
+            
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm rounded-4 bg-light">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-4">Обобщение</h5>
 
-       
-        <div class="text-end mt-3">
-            @{
-                decimal subtotal = Model.Items.Sum(i => i.Price * i.Quantity);
-                decimal total = subtotal;
+                        
+                        <form asp-action="ApplyPromoCode" method="post" class="mb-3">
+                            <label class="form-label small text-muted text-uppercase fw-bold">Имаш промо код?</label>
+                            <div class="input-group">
+                                <input name="code"
+                                       class="form-control border-end-0"
+                                       placeholder="Въведи код..."
+                                       value="@(TempData["AppliedPromoCode"] ?? "")" />
+                                <button class="btn btn-dark px-3">Приложи</button>
+                            </div>
+                        </form>
 
-                if (TempData["TotalWithPromo"] != null)
-                {
-                    var promoString = TempData.Peek("TotalWithPromo")?.ToString();
+                        @if (TempData["PromoError"] != null)
+                        {
+                            <div class="text-danger small mt-2"><i class="bi bi-exclamation-circle"></i> @TempData["PromoError"]</div>
+                        }
 
-                    if (decimal.TryParse(promoString, System.Globalization.NumberStyles.Any,
-                    System.Globalization.CultureInfo.InvariantCulture, out var promoValue))
-                    {
-                        total = promoValue;
-                    }
-                }
+                        <hr class="my-4 opacity-10">
 
+                       
+                        @{
+                            // Mejdinna suma
+                            decimal subtotal = Model.Items.Sum(i => i.Price * i.Quantity);
 
-            }
+                            // Kraina suma
+                            decimal finalTotal = subtotal;
 
-            <p>Междинна сума: @Model.Items.Sum(i => i.Price * i.Quantity).ToString("F2") лв.</p>
+                            if (ViewBag.Total != null)
+                            {
+                                try
+                                {
+                                    finalTotal = Convert.ToDecimal(ViewBag.Total);
+                                }
+                                catch
+                                {
+                                    finalTotal = subtotal;
+                                }
+                            }
 
-            @if (Model.AppliedPromoDiscountPercent > 0)
-            {
-                <p style="color:green;">
-                    Промо кодът е приложен (-@Model.AppliedPromoDiscountPercent %)
-                </p>
-            }
+                            //Otstupkata kato chislo
+                            decimal discountAmount = subtotal - finalTotal;
+                        }
 
-            <h3>Общо: @ViewBag.Total.ToString("F2") лв.</h3>
+                        
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Междинна сума</span>
+                            <span class="fw-bold">@subtotal.ToString("F2") €</span>
+                        </div>
 
+                       
+                        @if (discountAmount > 0)
+                        {
+                            <div class="d-flex justify-content-between mb-2 text-success">
+                                <span><i class="bi bi-ticket-perforated-fill"></i> Отстъпка (@Model.AppliedPromoDiscountPercent%)</span>
+                                <span class="fw-bold">-@discountAmount.ToString("F2") €</span>
+                            </div>
+                        }
 
+                        <hr class="my-3">
 
-        </div>
+                       
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <span class="h5 fw-bold mb-0">Общо</span>
+                            <span class="h3 fw-bold text-primary mb-0">@finalTotal.ToString("F2") €</span>
+                        </div>
 
-        
-        <div class="d-flex flex-column align-items-end mt-4">
-            <form asp-controller="Order"
-                  asp-action="CreateFromCart"
-                  method="post">
-                @Html.AntiForgeryToken()
-                <button type="submit" class="btn btn-success mb-2">Потвърди поръчка</button>
-            </form>
+                        
+                        <form asp-controller="Order" asp-action="CreateFromCart" method="post">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-success w-100 py-3 rounded-pill fw-bold shadow-sm btn-hover-scale">
+                                Потвърди поръчката <i class="bi bi-arrow-right ms-2"></i>
+                            </button>
+                        </form>
+
+                        <div class="text-center mt-3">
+                            <a asp-controller="Product" asp-action="Index" class="text-muted text-decoration-none small">
+                                <i class="bi bi-arrow-left"></i> Продължи с пазаруването
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
         </div>
     }
 </div>
+
+
+<style>
+    .transition-all {
+        transition: all 0.3s ease;
+    }
+
+    .hover-shadow:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;
+    }
+
+    .btn-hover-scale {
+        transition: transform 0.2s;
+    }
+
+        .btn-hover-scale:hover {
+            transform: scale(1.02);
+        }
+</style>
