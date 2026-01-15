@@ -123,7 +123,7 @@
             }
     </style>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <header>
         <nav class="navbar navbar-expand-lg navbar-light border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -208,15 +208,21 @@
         </nav>
     </header>
 
-    <div class="container">
+    <div class="container flex-grow-1">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted mt-5">
-        <div class="container text-center py-3">
-            &copy; 2026 - GiftRide - <a asp-controller="Home" asp-action="Privacy">Политика за поверителност</a>
+    <footer class="footer mt-auto py-3 bg-white border-top shadow-sm">
+        <div class="container text-center">
+            <span class="text-muted small">
+                &copy; 2026 <strong>GiftRide</strong>. Всички права запазени.
+                <span class="mx-2">|</span>
+                <a asp-controller="Home" asp-action="Privacy" class="text-decoration-none text-primary fw-bold">
+                    Политика за поверителност
+                </a>
+            </span>
         </div>
     </footer>
 

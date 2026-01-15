@@ -38,9 +38,6 @@ namespace GiftRide.Core.Services
             {
                 return false;
             }
-
-            
-
             
             if (date.Date < DateTime.Now.Date)
             {

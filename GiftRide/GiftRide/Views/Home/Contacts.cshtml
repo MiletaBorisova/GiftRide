@@ -17,9 +17,14 @@
     }
 
     body {
-        background-color: var(--bg-light);
-        background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
-        background-size: 30px 30px;
+        font-family: 'Montserrat', sans-serif;
+        /* Основен цвят - много светло сиво-синьо */
+        background-color: #f8fafc;
+        /* Модерни цветни петна (Mesh Gradient) */
+        background-image: radial-gradient(at 0% 0%, rgba(45, 212, 191, 0.15) 0px, transparent 50%), /* Teal горе ляво */
+        radial-gradient(at 100% 100%, rgba(244, 63, 94, 0.15) 0px, transparent 50%); /* Orange долу дясно */
+        background-attachment: fixed; /* Фонът стои неподвижно при скрол */
+        background-size: cover;
     }
 
     .contact-wrapper {

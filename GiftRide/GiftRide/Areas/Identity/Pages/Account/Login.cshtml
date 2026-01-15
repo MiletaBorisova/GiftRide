@@ -2,41 +2,228 @@
 @model LoginModel
 
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = "Вход";
 }
 
-<h1 class="text-center">@ViewData["Title"]</h1>
-<div class="row">
-    <div class="col-md-4">
-        <section>
-            <form id="account" method="post">
-                <h2>Use a local account to log in.</h2>
-                <hr />
-                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
 
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.UserName" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                    <label asp-for="Input.UserName" class="form-label">Username</label>
-                    <span asp-validation-for="Input.UserName" class="text-danger"></span>
+<style>
+    :root {
+        --gift-teal: #2dd4bf;
+        --ride-orange: #f43f5e;
+        --ride-yellow: #fbbf24;
+        --gift-blue: #0ea5e9;
+    }
+
+    /* Фон на страницата (Mesh Gradient) */
+    body {
+        font-family: 'Montserrat', sans-serif;
+        background-color: #f8fafc;
+        background-image: radial-gradient(at 0% 0%, rgba(45, 212, 191, 0.15) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(244, 63, 94, 0.15) 0px, transparent 50%);
+        background-attachment: fixed;
+        background-size: cover;
+    }
+
+    /* Карта */
+    .card-login {
+        border: none;
+        border-radius: 24px;
+        background: #ffffff;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+        position: relative;
+    }
+
+        .card-login::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(to right, var(--gift-teal), var(--ride-orange));
+        }
+
+    .brand-logo {
+        font-weight: 800;
+        font-size: 2.2rem;
+        color: var(--gift-teal);
+        text-align: center;
+        margin-bottom: 5px;
+        display: block;
+        text-decoration: none;
+        letter-spacing: -1px;
+    }
+
+        .brand-logo span {
+            color: var(--ride-orange);
+        }
+
+    /* Полета */
+    .form-floating > .form-control {
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        background-color: #fcfcfc;
+        padding-right: 45px; /* Място за иконата */
+        transition: all 0.2s ease;
+    }
+
+        .form-floating > .form-control:focus {
+            border-color: var(--gift-teal);
+            box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.1);
+            background-color: white;
+            transform: translateY(-1px);
+        }
+
+    .form-floating > label {
+        color: #94a3b8;
+        font-weight: 500;
+    }
+
+    /* Бутон за Вход */
+    .btn-login {
+        background: linear-gradient(135deg, var(--ride-orange), #f97316);
+        border: none;
+        color: white;
+        font-weight: 700;
+        padding: 16px;
+        font-size: 1.1rem;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        box-shadow: 0 10px 25px rgba(244, 63, 94, 0.25);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(244, 63, 94, 0.4);
+            color: white;
+            background: linear-gradient(135deg, #f97316, var(--ride-orange));
+        }
+
+    .register-link {
+        color: var(--gift-teal);
+        font-weight: 700;
+        transition: color 0.2s;
+    }
+
+        .register-link:hover {
+            color: var(--ride-orange);
+        }
+
+    /* Икони в полетата */
+    .input-icon {
+        position: absolute;
+        right: 18px;
+        top: 20px;
+        color: #cbd5e1;
+        font-size: 1.2rem;
+        z-index: 10;
+        pointer-events: none;
+        transition: color 0.2s;
+    }
+
+    .form-floating > .form-control:focus ~ .input-icon {
+        color: var(--gift-teal);
+    }
+
+    /* Специален стил за бутона за показване на парола */
+    .password-toggle-btn {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        color: #94a3b8;
+        z-index: 20;
+        padding: 5px 10px;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+
+        .password-toggle-btn:hover {
+            color: var(--gift-teal);
+        }
+
+    .text-danger {
+        font-size: 0.8rem;
+        margin-left: 5px;
+        margin-top: 4px;
+        font-weight: 500;
+    }
+
+    .fade-in-up {
+        animation: fadeInUp 0.6s ease-out forwards;
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    @@keyframes fadeInUp {
+        to
+
+    {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+</style>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-7 col-sm-9 fade-in-up">
+
+            <div class="card card-login p-4 p-md-5">
+                <div class="card-body">
+
+                    <div class="text-center mb-5">
+                        <a href="/" class="brand-logo">
+                            Gift<span>Ride</span>
+                        </a>
+                        <p class="text-muted fw-bold small text-uppercase ls-1">Добре дошли отново</p>
+                    </div>
+
+                    <section>
+                        <form id="account" method="post">
+
+                            <div asp-validation-summary="ModelOnly" class="alert alert-danger shadow-sm border-0 rounded-3 mb-4" role="alert" style="display:none;"></div>
+
+                            <div class="form-floating mb-3 position-relative">
+                                <input asp-for="Input.UserName" class="form-control" autocomplete="username" aria-required="true" placeholder="username" />
+                                <label asp-for="Input.UserName">Потребителско име</label>
+                                <i class="bi bi-person input-icon"></i>
+                                <span asp-validation-for="Input.UserName" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-floating mb-4 position-relative">
+                                <input asp-for="Input.Password" class="form-control" id="passwordField" autocomplete="current-password" aria-required="true" placeholder="password" style="padding-right: 50px;" />
+                                <label asp-for="Input.Password">Парола</label>
+                                <span asp-validation-for="Input.Password" class="text-danger"></span>
+
+                                <button type="button" class="password-toggle-btn" onclick="togglePassword()" title="Покажи/Скрий парола">
+                                    <i id="eyeIcon" class="bi bi-eye"></i>
+                                </button>
+                            </div>
+
+                            <div class="d-grid mb-3">
+                                <button id="login-submit" type="submit" class="btn btn-login rounded-pill">
+                                    Влез <i class="bi bi-box-arrow-in-right ms-2"></i>
+                                </button>
+                            </div>
+
+                            <div class="text-center mt-4">
+                                <span class="text-muted small">Нямаш профил?</span>
+                                <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="text-decoration-none register-link ms-1">Регистрирай се</a>
+                            </div>
+
+                        </form>
+                    </section>
                 </div>
+            </div>
 
-                <div class="form-floating mb-3 position-relative">
-                    <input asp-for="Input.Password" class="form-control" id="passwordField" autocomplete="current-password" aria-required="true" placeholder="password" />
-                    <label asp-for="Input.Password" class="form-label">Password</label>
-                    <span asp-validation-for="Input.Password" class="text-danger"></span>
-
-                    <!-- Show Password Button -->
-                    <button type="button" class="btn btn-sm btn-outline-secondary position-absolute top-50 end-0 translate-middle-y me-2"
-                            onclick="togglePassword()" style="z-index: 10;">
-                        Show
-                    </button>
-                </div>
-
-                <div class="mb-3">
-                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
-                </div>
-            </form>
-        </section>
+        </div>
     </div>
 </div>
 
@@ -45,10 +232,18 @@
     <script>
         function togglePassword() {
             const pwd = document.getElementById("passwordField");
+            const icon = document.getElementById("eyeIcon");
+
             if (pwd.type === "password") {
                 pwd.type = "text";
+                // Сменяме иконата на "зачеркнато око"
+                icon.classList.remove("bi-eye");
+                icon.classList.add("bi-eye-slash");
             } else {
                 pwd.type = "password";
+                // Връщаме нормалното око
+                icon.classList.remove("bi-eye-slash");
+                icon.classList.add("bi-eye");
             }
         }
     </script>

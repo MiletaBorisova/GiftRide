@@ -3,7 +3,16 @@
 }
 
 <style>
-    /* ГЛАВЕН БАНЕР (HERO) */
+    body {
+        font-family: 'Montserrat', sans-serif;
+        /* Основен цвят - много светло сиво-синьо */
+        background-color: #f8fafc;
+        /* Модерни цветни петна (Mesh Gradient) */
+        background-image: radial-gradient(at 0% 0%, rgba(45, 212, 191, 0.15) 0px, transparent 50%), /* Teal горе ляво */
+        radial-gradient(at 100% 100%, rgba(244, 63, 94, 0.15) 0px, transparent 50%); /* Orange долу дясно */
+        background-attachment: fixed; /* Фонът стои неподвижно при скрол */
+        background-size: cover;
+    }
     
     .hero-section {
         position: relative;
@@ -160,33 +169,57 @@
     </div>
 
     <h2 class="fw-bold text-center mb-5 display-4">Открий своята <span style="color: var(--ride-orange)">стихия</span></h2>
+
     <div class="row g-4">
+
         <div class="col-md-4">
-            <div class="cat-card">
-                <img src="~/pictures/AirAdventures.jpg" alt="Air">
-                <div class="cat-overlay">
-                    <h3 class="fw-bold">Въздушни</h3>
-                    <p>Скокове с парашут, полети с делтапланер и балон.</p>
+            <a asp-controller="Product"
+               asp-action="Index"
+               asp-route-searchStringCategoryName="Въздушни"
+               class="text-decoration-none text-reset">
+                <div class="cat-card">
+                    <img src="~/pictures/AirAdventures.jpg" alt="Air">
+                    <div class="cat-overlay">
+                        <h3 class="fw-bold">Въздушни</h3>
+                        <p>Скокове с парашут, полети с делтапланер и балон.</p>
+                    </div>
                 </div>
-            </div>
+
+            </a>
         </div>
+
         <div class="col-md-4">
-            <div class="cat-card">
-                <img src="~/pictures/WaterAdventures.jpg" alt="Water">
-                <div class="cat-overlay">
-                    <h3 class="fw-bold">Водни</h3>
-                    <p>Джет, рафтинг, гмуркане и ветроходство.</p>
+            <a asp-controller="Product"
+               asp-action="Index"
+               asp-route-searchStringCategoryName="Водни"
+               class="text-decoration-none text-reset">
+
+                <div class="cat-card">
+                    <img src="~/pictures/WaterAdventures.jpg" alt="Water">
+                    <div class="cat-overlay">
+                        <h3 class="fw-bold">Водни</h3>
+                        <p>Джет, рафтинг, гмуркане и ветроходство.</p>
+                    </div>
                 </div>
-            </div>
+
+            </a>
         </div>
-        <div class="col-md-3">
-            <div class="cat-card">
-                <img src="~/pictures/OffroadAdventures.jpg" alt="Offroad">
-                <div class="cat-overlay">
-                    <h3 class="fw-bold">Офроуд</h3>
-                    <p>АТВ, Бъги и 4х4 приключения.</p>
+
+        <div class="col-md-4">
+            <a asp-controller="Product"
+               asp-action="Index"
+               asp-route-searchStringCategoryName="Офроуд и Моторни"
+               class="text-decoration-none text-reset">
+
+                <div class="cat-card">
+                    <img src="~/pictures/OffroadAdventures.jpg" alt="Offroad">
+                    <div class="cat-overlay">
+                        <h3 class="fw-bold">Офроуд</h3>
+                        <p>АТВ, Бъги и 4х4 приключения.</p>
+                    </div>
                 </div>
-            </div>
+
+            </a>
         </div>
 
     </div>
