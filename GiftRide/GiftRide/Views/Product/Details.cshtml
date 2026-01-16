@@ -1,81 +1,267 @@
 ﻿@model GiftRide.Models.Product.ProductDetailsVM
-@{
-    ViewData["Title"] = "Details";
-}
-<h1>Details</h1>
-<div>
-    <h4>ProductDetailsVM</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ProductName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ProductName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ValidityName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ValidityName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CategoryName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CategoryName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Picture)
-        </dt>
-        <dd class="col-sm-10">
-            <img src="@Html.DisplayFor(model => model.Picture)" alt="Image"
-                 width="100" />
-            @*@Html.DisplayFor(model => model.Picture)*@
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Quantity)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Quantity)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Discount)
-        </dt>
-        <dd class="col-sm-10">
-@Html.DisplayFor(model => model.Discount)
-        </dd>
-    </dl>
-</div>
-<div>
 
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+@{
+    ViewData["Title"] = Model.ProductName;
+}
 
 <style>
     body {
         font-family: 'Montserrat', sans-serif;
-       
         background-color: #f8fafc;
-        background-image: radial-gradient(at 0% 0%, rgba(45, 212, 191, 0.15) 0px, transparent 50%), 
-        radial-gradient(at 100% 100%, rgba(244, 63, 94, 0.15) 0px, transparent 50%); 
-        background-attachment: fixed; 
+        background-image: radial-gradient(at 0% 0%, rgba(45, 212, 191, 0.15) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(244, 63, 94, 0.15) 0px, transparent 50%);
+        background-attachment: fixed;
         background-size: cover;
     }
+
+    
+    .product-gallery {
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        background: #fff;
+        position: relative; 
+    }
+
+   
+    .product-image {
+        height: 500px;
+        object-fit: cover;
+        width: 100%;
+        display: block;
+        transition: transform 0.3s ease;
+    }
+
+   
+    .product-gallery:hover .product-image {
+        transform: scale(1.02);
+    }
+
+   
+    .buy-panel {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        border: 1px solid rgba(255,255,255,0.5);
+        position: sticky;
+        top: 20px;
+    }
+
+    .badge-custom {
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+
+    .bg-teal-light {
+        background-color: rgba(45, 212, 191, 0.15);
+        color: #0d9488;
+    }
+
+    .bg-orange-light {
+        background-color: rgba(244, 63, 94, 0.15);
+        color: #e11d48;
+    }
+
+    .price-tag {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #1e293b;
+    }
+
+    .old-price {
+        text-decoration: line-through;
+        color: #94a3b8;
+        font-size: 1.2rem;
+    }
+
+    .btn-buy {
+        background: linear-gradient(135deg, #f43f5e, #f97316);
+        border: none;
+        color: white;
+        font-weight: 700;
+        padding: 15px;
+        border-radius: 12px;
+        transition: transform 0.2s, box-shadow 0.2s;
+        width: 100%;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+        .btn-buy:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(244, 63, 94, 0.3);
+            color: white;
+        }
+
+    .btn-fav {
+        border: 2px solid #e2e8f0;
+        background: #fff;
+        color: #64748b;
+        border-radius: 12px;
+        padding: 13px;
+        transition: all 0.2s;
+    }
+
+        .btn-fav:hover {
+            border-color: #f43f5e;
+            color: #f43f5e;
+            background: #fff0f3;
+        }
+
+    .description-section {
+        background: #fff;
+        border-radius: 20px;
+        padding: 40px;
+        margin-top: 40px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+    }
+
+    .info-box {
+        background: #f8fafc;
+        border-radius: 12px;
+        padding: 20px;
+        height: 100%;
+        border-left: 4px solid var(--gift-teal);
+    }
 </style>
+
+<div class="container py-5">
+
+    <div class="row g-5">
+
+        <div class="col-lg-7">
+            <div class="product-gallery">
+                <img src="@Model.Picture" class="product-image" alt="@Model.ProductName">
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="buy-panel">
+
+                <div class="d-flex gap-2 mb-3">
+                    <span class="badge-custom bg-teal-light">
+                        <i class="bi bi-tag-fill me-1"></i> @Model.CategoryName
+                    </span>
+                    <span class="badge-custom bg-orange-light">
+                        <i class="bi bi-hourglass-split me-1"></i> @Model.ValidityName
+                    </span>
+                </div>
+
+                <h1 class="fw-bold text-dark mb-2 lh-sm">@Model.ProductName</h1>
+
+                <div class="mb-4">
+                    @if (Model.Discount > 0)
+                    {
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="old-price">@Model.Price.ToString("F2") €</span>
+                            <span class="badge bg-danger rounded-pill">-@Model.Discount%</span>
+                        </div>
+
+                        <div class="price-tag">
+                            @((Model.Price - (Model.Price * Model.Discount / 100)).ToString("F2")) €
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="price-tag">@Model.Price.ToString("F2") €</div>
+                    }
+                    <p class="text-muted small m-0">Цената е за 1 брой (ваучер).</p>
+                </div>
+
+                <form asp-controller="Cart" asp-action="Add" method="post" asp-route-productId="@Model.Id">
+                    <input type="hidden" name="id" value="@Model.Id" />
+
+                    <div class="row g-2 mb-4">
+                        <div class="col-4">
+                            <div class="form-floating">
+                                <select name="quantity" class="form-select border-secondary fw-bold text-center" id="qtySelect">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                                <label for="qtySelect">Брой</label>
+                            </div>
+                        </div>
+
+                        <div class="col-8 d-flex align-items-center">
+                            @if (Model.Quantity > 0)
+                            {
+                                <span class="text-success fw-bold"><i class="bi bi-check-circle-fill me-1"></i> В наличност</span>
+                            }
+                            else
+                            {
+                                <span class="text-danger fw-bold"><i class="bi bi-x-circle-fill me-1"></i> Изчерпано</span>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-3">
+                        <button type="submit" class="btn btn-buy flex-grow-1" @(Model.Quantity == 0 ? "disabled" : "")>
+                            <i class="bi bi-bag-plus-fill me-2"></i> Добави в количката
+                        </button>
+
+                        <a asp-controller="Favorites" asp-action="Add" asp-route-productId="@Model.Id" class="btn btn-fav" title="Добави в любими">
+                            <i class="bi bi-heart"></i>
+                        </a>
+                    </div>
+                </form>
+
+            </div>
+
+            <div class="mt-3 text-end">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="text-decoration-none text-muted small me-2">Редактирай</a>
+                <span class="text-muted small">|</span>
+                <a asp-action="Index" class="text-decoration-none text-muted small ms-2">Назад към списъка</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="description-section">
+                <h3 class="fw-bold mb-4">За преживяването</h3>
+
+                <div class="row g-4">
+                    <div class="col-md-8">
+                        <div class="text-muted lh-lg" style="white-space: pre-wrap;">@Model.Description</div>
+
+                        <h5 class="fw-bold mt-5 mb-3">Какво включва?</h5>
+                        <ul class="list-unstyled text-muted">
+                            <li class="mb-2"><i class="bi bi-check2-circle text-success me-2"></i> Всички необходими консумативи/екипировка</li>
+                            <li class="mb-2"><i class="bi bi-check2-circle text-success me-2"></i> Професионално изпълнение и отношение</li>
+                            <li class="mb-2"><i class="bi bi-check2-circle text-success me-2"></i> Предварителна подготовка и инструкции</li>
+                            <li class="mb-2"><i class="bi bi-check2-circle text-success me-2"></i> Гарантирано високо качество</li>
+                            <li class="mb-2"><i class="bi bi-check2-circle text-success me-2"></i> Незабравими емоции</li>
+                        </ul>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="d-flex flex-column gap-3">
+                            <div class="info-box">
+                                <h6 class="fw-bold text-dark">Валидност</h6>
+                                <p class="text-muted small m-0">Ваучерът е с <strong>@Model.ValidityName</strong> от датата на закупуване.</p>
+                            </div>
+
+                            <div class="info-box" style="border-color: var(--ride-orange);">
+                                <h6 class="fw-bold text-dark">За кого е подходящо?</h6>
+                                <p class="text-muted small m-0">Подходящо за всеки, който търси оригинален подарък или бягство от ежедневието с незабравими емоции.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
