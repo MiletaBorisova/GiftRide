@@ -18,12 +18,11 @@
 
     body {
         font-family: 'Montserrat', sans-serif;
-        /* Основен цвят - много светло сиво-синьо */
+       
         background-color: #f8fafc;
-        /* Модерни цветни петна (Mesh Gradient) */
-        background-image: radial-gradient(at 0% 0%, rgba(45, 212, 191, 0.15) 0px, transparent 50%), /* Teal горе ляво */
-        radial-gradient(at 100% 100%, rgba(244, 63, 94, 0.15) 0px, transparent 50%); /* Orange долу дясно */
-        background-attachment: fixed; /* Фонът стои неподвижно при скрол */
+        background-image: radial-gradient(at 0% 0%, rgba(45, 212, 191, 0.15) 0px, transparent 50%), 
+        radial-gradient(at 100% 100%, rgba(244, 63, 94, 0.15) 0px, transparent 50%); 
+        background-attachment: fixed; 
         background-size: cover;
     }
 
@@ -34,13 +33,12 @@
         min-height: 80vh; 
     }
 
-    /* Стил за заглавната секция */
+   
     .hero-header h1 {
-        font-family: 'Montserrat', sans-serif; /* Модерен, дебел шрифт */
+        font-family: 'Montserrat', sans-serif;
         font-weight: 800;
-        font-size: 3.5rem; /* По-голям размер */
-        letter-spacing: -1px; /* Буквите леко сближени за стил */
-        /* ГРАДИЕНТЕН ТЕКСТ (Магията!) */
+        font-size: 3.5rem; 
+        letter-spacing: -1px; 
         background: linear-gradient(135deg, #333 0%, var(--gift-teal) 40%, var(--ride-orange) 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -48,12 +46,12 @@
         line-height: 1.2;
     }
 
-    /* Декоративна чертичка отдолу */
+    
     .hero-line {
         width: 100px;
         height: 6px;
         background: linear-gradient(to right, var(--gift-teal), var(--ride-orange));
-        margin: 20px auto 30px auto; /* Центрирана */
+        margin: 20px auto 30px auto; 
         border-radius: 10px;
     }
 
@@ -68,7 +66,7 @@
     
     
 
-    /* --- Animations --- */
+   
     @@keyframes fadeInUp {
         from {
             opacity: 0;
@@ -116,7 +114,7 @@
         animation-delay: 0.5s;
     }
 
-    /* --- Icons --- */
+   
     .info-card {
         text-align: center;
         padding: 30px 20px; 
@@ -178,7 +176,7 @@
             color: var(--ride-orange);
         }
 
-    /* --- Form --- */
+   
     .form-section {
         background: white;
         padding: 40px;
@@ -218,7 +216,7 @@
         margin-left: 5px;
     }
 
-    /* --- Button --- */
+  
     .btn-gradient {
         background: linear-gradient(135deg, var(--ride-orange), #f97316);
         color: white;

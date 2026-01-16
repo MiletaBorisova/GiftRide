@@ -38,7 +38,7 @@
         color: #64748b;
     }
 
-    /* Корекция за rounded ъглите при input-group */
+    
     .input-group > .form-floating > .form-control {
         border-radius: 0 12px 12px 0;
         border-left: none;
@@ -134,34 +134,41 @@
                                 <span asp-validation-for="Description" class="text-danger small ms-2"></span>
                             </div>
 
-                            <div class="col-md-4">
-                                <div class="input-group">
-                                    <span class="input-group-text">€</span>
-                                    <div class="form-floating">
-                                        <input asp-for="Price" class="form-control" placeholder="0.00" />
-                                        <label asp-for="Price">Цена</label>
-                                    </div>
-                                </div>
-                                <span asp-validation-for="Price" class="text-danger small ms-2"></span>
-                            </div>
+                            <div class="row g-3">
 
-                            <div class="col-md-4">
-                                <div class="form-floating">
-                                    <input asp-for="Quantity" class="form-control" placeholder="0" />
-                                    <label asp-for="Quantity">Количество</label>
-                                </div>
-                                <span asp-validation-for="Quantity" class="text-danger small ms-2"></span>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="input-group">
-                                    <span class="input-group-text">%</span>
-                                    <div class="form-floating">
-                                        <input asp-for="Discount" class="form-control" placeholder="0" />
-                                        <label asp-for="Discount">Отстъпка</label>
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <span class="input-group-text">€</span>
+                                        <div class="form-floating">
+                                            <input asp-for="Price" class="form-control" placeholder="0.00" />
+                                            <label asp-for="Price">Цена</label>
+                                        </div>
                                     </div>
+                                    <span asp-validation-for="Price" class="text-danger small ms-2"></span>
                                 </div>
-                                <span asp-validation-for="Discount" class="text-danger small ms-2"></span>
+
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-box-seam"></i></span>
+                                        <div class="form-floating">
+                                            <input asp-for="Quantity" class="form-control" placeholder="0" />
+                                            <label asp-for="Quantity">Количество</label>
+                                        </div>
+                                    </div>
+                                    <span asp-validation-for="Quantity" class="text-danger small ms-2"></span>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <span class="input-group-text">%</span>
+                                        <div class="form-floating">
+                                            <input asp-for="Discount" class="form-control" placeholder="0" />
+                                            <label asp-for="Discount">Отстъпка</label>
+                                        </div>
+                                    </div>
+                                    <span asp-validation-for="Discount" class="text-danger small ms-2"></span>
+                                </div>
+
                             </div>
 
                         </div>

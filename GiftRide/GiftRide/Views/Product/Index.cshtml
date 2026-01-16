@@ -12,6 +12,36 @@
         <a asp-action="Create" class="btn btn-primary mb-4">Create New</a>
 }
 
+    <!-- FILTER -->
+
+    <form asp-controller="Product" asp-action="Index" method="get" class="row g-3 mb-4 align-items-end">
+        <div class="col-md-3">
+            <input type="text" name="SearchStringValidityName"
+                   class="form-control"
+                   placeholder="Validity">
+        </div>
+        <div class="col-md-3">
+            <input type="text" name="SearchStringCategoryName"
+                   class="form-control"
+                   placeholder="Category">
+        </div>
+        <div class="col-md-2">
+            <select name="sort" class="form-select" onchange="this.form.submit()">
+                <option value="">Подреди...</option>
+                <option value="name_asc">A → Z</option>
+                <option value="name_desc">Z → A</option>
+                <option value="price_asc">Цена ↑</option>
+                <option value="price_desc">Цена ↓</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">
+                Filter
+            </button>
+        </div>
+    </form>
+
+
 <div class="container my-5">
     <div class="row g-4">
         @foreach (var item in Model)
@@ -98,13 +128,10 @@
 <style>
     body {
         font-family: 'Montserrat', sans-serif;
-        /* Основен цвят - много светло сиво-синьо */
         background-color: #f8fafc;
-        /* Модерни цветни петна (Mesh Gradient) */
-        background-image: radial-gradient(at 0% 0%, rgba(45, 212, 191, 0.15) 0px, transparent 50%), /* Teal горе ляво */
-        radial-gradient(at 100% 100%, rgba(244, 63, 94, 0.15) 0px, transparent 50%); /* Orange долу дясно */
-        background-attachment: fixed; /* Фонът стои неподвижно при скрол */
-        background-size: cover;
+        background-image: radial-gradient(at 0% 0%, rgba(45, 212, 191, 0.15) 0px, transparent 50%), 
+        radial-gradient(at 100% 100%, rgba(244, 63, 94, 0.15) 0px, transparent 50%); 
+        background-attachment: fixed; 
     }
     .product-card {
         transition: transform 0.2s, box-shadow 0.2s;

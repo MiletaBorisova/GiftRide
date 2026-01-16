@@ -15,30 +15,27 @@
         --gift-blue: #0ea5e9;
     }
 
-    /* ТУК Е МАГИЯТА ЗА БОДИТО */
+    
     body {
         font-family: 'Montserrat', sans-serif;
-        /* Основен цвят - много светло сиво-синьо */
-        background-color: #f8fafc;
-        /* Модерни цветни петна (Mesh Gradient) */
-        background-image: radial-gradient(at 0% 0%, rgba(45, 212, 191, 0.15) 0px, transparent 50%), /* Teal горе ляво */
-        radial-gradient(at 100% 100%, rgba(244, 63, 94, 0.15) 0px, transparent 50%); /* Orange долу дясно */
-        background-attachment: fixed; /* Фонът стои неподвижно при скрол */
+        background-color: #f8fafc;     
+        background-image: radial-gradient(at 0% 0%, rgba(45, 212, 191, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(244, 63, 94, 0.15) 0px, transparent 50%); 
+        background-attachment: fixed; 
         background-size: cover;
     }
 
-    /* Картата - изчистена, бяла, с модерна сянка */
+  
     .card-registration {
         border: none;
         border-radius: 24px;
-        background: #ffffff;
-        /* Мека, разпръсната сянка */
+        background: #ffffff;        
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.05);
         overflow: hidden;
         position: relative;
     }
 
-        /* Цветната лента отгоре */
+      
         .card-registration::before {
             content: '';
             position: absolute;
@@ -64,7 +61,6 @@
             color: var(--ride-orange);
         }
 
-    /* Полетата */
     .form-floating > .form-control {
         border-radius: 12px;
         border: 1px solid #e2e8f0;
@@ -85,7 +81,7 @@
         font-weight: 500;
     }
 
-    /* Бутонът */
+   
     .btn-register {
         background: linear-gradient(135deg, var(--ride-orange), #f97316);
         border: none;
@@ -127,7 +123,7 @@
         transition: color 0.2s;
     }
 
-    /* Когато полето е активно, иконата става цветна */
+   
     .form-floating > .form-control:focus ~ .input-icon {
         color: var(--gift-teal);
     }
@@ -139,7 +135,7 @@
         font-weight: 500;
     }
 
-    /* Анимация за плавно появяване */
+    
     .fade-in-up {
         animation: fadeInUp 0.6s ease-out forwards;
         opacity: 0;
@@ -213,6 +209,12 @@
                             <label asp-for="Input.Email">Имейл адрес</label>
                             <i class="bi bi-envelope input-icon"></i>
                             <span asp-validation-for="Input.Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating mb-3 position-relative">
+                            <input asp-for="Input.PhoneNumber" class="form-control" placeholder="PhoneNumber" />
+                            <label asp-for="Input.PhoneNumber">Телефон</label>
+                            <i class="bi bi-telephone input-icon"></i>
+                            <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
                         </div>
 
                         <div class="form-floating mb-3 position-relative">
