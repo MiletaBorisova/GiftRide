@@ -215,7 +215,13 @@
             </div>
 
             <div class="mt-3 text-end">
-                <a asp-action="Edit" asp-route-id="@Model.Id" class="text-decoration-none text-muted small me-2">Редактирай</a>
+                @if (User.Identity.IsAuthenticated && User.IsInRole("Administrator"))
+                {
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="text-decoration-none text-muted small me-2">Редактирай</a>
+                    <span class="text-muted small">|</span>
+                    <a asp-action="Delete" asp-route-id="@Model.Id" class="text-decoration-none text-muted small me-2">Изтрий продукта</a>
+                }
+               
                 <span class="text-muted small">|</span>
                 <a asp-action="Index" class="text-decoration-none text-muted small ms-2">Назад към списъка</a>
             </div>

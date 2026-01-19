@@ -1,7 +1,99 @@
-﻿﻿@{
-ViewData["Title"] = "Success";
+﻿@{
+    ViewData["Title"] = "Успех";
 }
-<h1>You successfully removed a product!</h1>
-<div>
-    <a asp-action="Index">Back to list</a>
+
+<style>
+    body {
+        font-family: 'Montserrat', sans-serif;
+        background-color: #f8fafc;
+        background-image: radial-gradient(at 0% 0%, rgba(45, 212, 191, 0.15) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(244, 63, 94, 0.15) 0px, transparent 50%);
+        background-attachment: fixed;
+        background-size: cover;
+    }
+
+    .card-success {
+        border: none;
+        border-radius: 24px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+        background: #ffffff;
+        text-align: center;
+        padding: 3rem 2rem;
+    }
+
+   
+    .icon-circle {
+        width: 100px;
+        height: 100px;
+        background-color: #dcfce7; 
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem auto;
+        animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+        .icon-circle i {
+            font-size: 3.5rem;
+            color: #16a34a; 
+        }
+
+   
+    .btn-back {
+        background: linear-gradient(135deg, #0ea5e9, #2dd4bf);
+        border: none;
+        color: white;
+        font-weight: 700;
+        padding: 12px 30px;
+        border-radius: 50px;
+        transition: transform 0.2s, box-shadow 0.2s;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 1rem;
+    }
+
+        .btn-back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(14, 165, 233, 0.3);
+            color: white;
+        }
+
+    @@keyframes popIn {
+        0%
+
+    {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    }
+</style>
+
+<div class="container py-5" style="min-height: 80vh; display: flex; align-items: center; justify-content: center;">
+    <div class="col-md-6 col-lg-5">
+
+        <div class="card card-success">
+
+            <div class="icon-circle">
+                <i class="bi bi-check-lg"></i>
+            </div>
+
+            <h2 class="fw-bold text-dark mb-3">Готово!</h2>
+
+            <p class="text-muted mb-4 fs-5">
+                Продуктът беше изтрит успешно от системата.
+            </p>
+
+            <a asp-action="Index" class="btn btn-back shadow-sm">
+                <i class="bi bi-arrow-left me-2"></i> Обратно към списъка
+            </a>
+
+        </div>
+
+    </div>
 </div>
