@@ -96,5 +96,10 @@ namespace GiftRide.Core.Services
             _context.Update(product);
             return _context.SaveChanges() != 0;
         }
+
+        public bool HasOrders(int productId)
+        {
+            return _context.Orders.Any(x => x.ProductId == productId);
+        }
     }
 }

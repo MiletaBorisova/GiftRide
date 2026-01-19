@@ -35,10 +35,9 @@ namespace WebShopApp.Controllers
         {
             var userId = GetUserId();
             await _favoriteService.AddFavoriteAsync(userId, productId);
-            return RedirectToAction("Index", "Product");
+            return RedirectToAction("Index", "Favorites");
 
-            TempData["Success"] = "Продуктът е добавен в любими!";
-            return RedirectToAction("Index", "Product");
+            
         }
 
         [Authorize]

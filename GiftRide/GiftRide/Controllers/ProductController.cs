@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using static System.Net.WebRequestMethods;
+using GiftRide.Models.Product;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace GiftRide.Controllers
 {
@@ -276,17 +278,26 @@ namespace GiftRide.Controllers
         // POST: ProductController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public IActionResult Delete(ProductDeleteVM bindingModel)
         {
+            int id = bindingModel.Id;
+            var product = _productService.GetProductById(id);
+            if (product == null) 
+            { 
+                return NotFound(); 
+            }
+            else if (_productService.HasOrders(id))
+            {
+                return RedirectToAction("Denied");
+            }
             var deleted = _productService.RemoveById(id);
             if (deleted)
             {
-                return this.RedirectToAction("Success");
+                return RedirectToAction("Success");
             }
-            else
-            {
-                return View();
-            }
+            return View(bindingModel);
+        
+
 
         }
 
@@ -295,6 +306,11 @@ namespace GiftRide.Controllers
             return View();
         }
 
-        
+        public IActionResult Denied()
+        {
+            return View();
+        }
+
+
     }
 }

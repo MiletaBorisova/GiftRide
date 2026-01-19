@@ -16,7 +16,7 @@ namespace GiftRide.Infrastructure.Data.Entities
         public string? ProductName { get; set; }
 
         [Required]
-        [Column(TypeName = "nvarchar(max)")]
+      
         public string? Description { get; set; }
         [Required]
         public int CategoryId { get; set; }

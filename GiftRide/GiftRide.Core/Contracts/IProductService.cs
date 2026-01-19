@@ -18,6 +18,12 @@ namespace GiftRide.Core.Contracts
         List<Product> GetProducts();
         Product GetProductById(int productId);
         bool RemoveById(int productId);
+    
         List<Product> GetProducts(string searchStringCategoryName, string searchStringValidityName);
+
+        bool HasOrders(int productId);
     }
+
+
+
 }
