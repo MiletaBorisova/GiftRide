@@ -21,5 +21,7 @@ namespace GiftRide.Infrastructure.Data.Entities
         [Required]
         [MaxLength(50)]
         public string? Address { get; set; }
+
+        public virtual Cart Cart { get; set; }
     }
 }
