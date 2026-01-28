@@ -527,13 +527,13 @@
 <script>
     function openPreview() {
         var name = document.getElementById('demoInputName').value;
-        var msg = document.getElementById('demoInputMessage').value;
+        var message = document.getElementById('demoInputMessage').value;
 
         if (!name) name = "Име на получателя";
-        if (!msg) msg = "Твоето пожелание тук...";
+        if (!message) message = "Твоето пожелание тук...";
 
         document.getElementById('previewName').innerText = name;
-        document.getElementById('previewMessage').innerText = msg;
+        document.getElementById('previewMessage').innerText = message;
 
         $('#previewModal').modal('show');
     }

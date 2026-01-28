@@ -43,6 +43,7 @@ namespace GiftRide
             builder.Services.AddTransient<IStatisticService, StatisticService>();
             builder.Services.AddTransient<IFavoriteService, FavoriteService>();
             builder.Services.AddTransient<IReservationService, ReservationService>();
+            builder.Services.AddTransient<IChatService, ChatService>();
 
 
             var app = builder.Build();

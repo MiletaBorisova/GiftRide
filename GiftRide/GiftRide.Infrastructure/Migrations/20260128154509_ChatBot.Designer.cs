@@ -4,6 +4,7 @@ using GiftRide.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GiftRide.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260128154509_ChatBot")]
+    partial class ChatBot
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -227,20 +230,6 @@ namespace GiftRide.Infrastructure.Migrations
                             Answer = "След като купите ваучер, влезте в списъка с поръчките си и използвайте бутона 'Резервация' срещу съответната поръчка.",
                             Keywords = "резерв, запаз, час, дата, използ",
                             Question = "Как да резервирам?"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Answer = "За да направите поръчка и да имате достъп до историята на Вашите ваучери и резервации, е необходимо да си създадете профил в GiftRide.",
-                            Keywords = "регистрация, профил, акаунт, вход, login, register",
-                            Question = "Нужна ли е регистрация?"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Answer = "След успешна покупка, всички Ваши ваучери се съхраняват в секция 'Моите поръчки' във Вашия профил, откъдето можете да ги разгледате по всяко време.",
-                            Keywords = "къде, намират, ваучерите, поръчките, orders, история, изтегля",
-                            Question = "Къде са ми ваучерите?"
                         });
                 });
 

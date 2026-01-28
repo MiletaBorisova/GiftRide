@@ -121,6 +121,141 @@
                 color: var(--gift-blue);
                 padding-left: 20px;
             }
+
+
+        /* --- CHATBOT STYLES --- */
+
+        #chat-widget-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9999;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* Кръглият бутон */
+        #chat-toggle-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f43f5e, #f97316); /* Твоят оранжев градиент */
+            color: white;
+            border: none;
+            font-size: 24px;
+            box-shadow: 0 4px 15px rgba(244, 63, 94, 0.4);
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            #chat-toggle-btn:hover {
+                transform: scale(1.1);
+            }
+
+        /* Прозорецът */
+        #chat-window {
+            width: 350px;
+            height: 450px;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Скрит режим */
+        .chat-hidden {
+            display: none !important; /* Или използвай opacity/pointer-events за анимация */
+        }
+
+        /* Хедър */
+        .chat-header {
+            background: linear-gradient(135deg, #2dd4bf, #0ea5e9); /* Твоят син градиент */
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-close-chat {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        /* Тяло (Съобщения) */
+        .chat-body {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* Футър (Инпут) */
+        .chat-footer {
+            padding: 10px;
+            background: #fff;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 10px;
+        }
+
+        #user-input {
+            flex: 1;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 8px 15px;
+            outline: none;
+            font-size: 0.9rem;
+        }
+
+        #send-btn {
+            background: #f43f5e;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        /* БАЛОНЧЕТА СЪОБЩЕНИЯ */
+        .bot-msg {
+            align-self: flex-start;
+            background: #e0f2fe; /* Светло синьо */
+            color: #334155;
+            padding: 10px 15px;
+            border-radius: 15px 15px 15px 0;
+            font-size: 0.9rem;
+            max-width: 80%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .user-msg {
+            align-self: flex-end;
+            background: #f43f5e; /* Твоят акцентен цвят */
+            color: white;
+            padding: 10px 15px;
+            border-radius: 15px 15px 0 15px;
+            font-size: 0.9rem;
+            max-width: 80%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
     </style>
 </head>
 <body class="d-flex flex-column min-vh-100">
@@ -225,6 +360,105 @@
             </span>
         </div>
     </footer>
+
+
+    <div id="chat-widget-container">
+
+        <button id="chat-toggle-btn" onclick="toggleChat()">
+            <i class="bi bi-chat-dots-fill"></i>
+        </button>
+
+        <div id="chat-window" class="chat-hidden">
+
+            <div class="chat-header">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-robot fs-4"></i>
+                    <div>
+                        <span class="fw-bold d-block" style="font-size: 0.9rem;">GiftRide Bot</span>
+                        <span class="small opacity-75">Online</span>
+                    </div>
+                </div>
+                <button onclick="toggleChat()" class="btn-close-chat"><i class="bi bi-x-lg"></i></button>
+            </div>
+
+            <div id="chat-messages" class="chat-body">
+                <div class="bot-msg">
+                    👋 Здравей! Аз съм AI асистентът на GiftRide. Питай ме за валидност, доставка или всичко, което те интересува!
+                </div>
+            </div>
+
+            <div class="chat-footer">
+                <input type="text" id="user-input" placeholder="Питай нещо..." onkeypress="handleKeyPress(event)">
+                <button onclick="sendMessage()" id="send-btn">
+                    <i class="bi bi-send-fill"></i>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+
+    <script>
+        // 1. Отваряне и затваряне на чата
+        function toggleChat() {
+            var chatWindow = document.getElementById('chat-window');
+            if (chatWindow.classList.contains('chat-hidden')) {
+                chatWindow.classList.remove('chat-hidden');
+                // Фокус върху полето
+                setTimeout(() => document.getElementById('user-input').focus(), 100);
+            } else {
+                chatWindow.classList.add('chat-hidden');
+            }
+        }
+
+        // 2. Слушаме за Enter
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // 3. Изпращане на съобщение
+        function sendMessage() {
+            var inputField = document.getElementById('user-input');
+            var message = inputField.value.trim();
+
+            if (message === "") return;
+
+            // Добавяме съобщението на потребителя в чата
+            addMessage(message, 'user-msg');
+            inputField.value = ''; // Чистим полето
+
+            // Показваме, че ботът мисли... (опционално)
+            // ...
+
+            // AJAX ЗАЯВКА КЪМ СЪРВЪРА
+            $.ajax({
+                type: "POST",
+                url: "/Chat/GetResponse", // Пътят към контролера
+                data: { message: message },
+                success: function (response) {
+                    // Добавяме отговора на бота
+                    addMessage(response.reply, 'bot-msg');
+                },
+                error: function () {
+                    addMessage("Опа, нещо се обърка с връзката.", 'bot-msg');
+                }
+            });
+        }
+
+        // 4. Помощна функция за рисуване на балончета
+        function addMessage(text, className) {
+            var chatBody = document.getElementById('chat-messages');
+            var div = document.createElement('div');
+            div.className = className;
+            div.innerText = text;
+            chatBody.appendChild(div);
+
+            // Скролваме най-долу
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+    </script>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
