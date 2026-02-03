@@ -207,9 +207,19 @@ namespace GiftRide.Controllers
         {
             if (ModelState.IsValid)
             {
-                var updated = _productService.Update(id, product.ProductName, product.Description,
-                    product.ValidityId, product.CategoryId, product.Picture,
-                    product.Quantity, product.Price, product.Discount);
+               
+                var updated = _productService.Update(
+                    id,
+                    product.ProductName,
+                    product.Description,
+                    product.ValidityId,
+                    product.CategoryId,
+                    product.Picture,
+                    product.Quantity,
+                    product.Price,
+                    product.Discount
+                );
+
                 if (updated)
                 {
                     return this.RedirectToAction("Index");

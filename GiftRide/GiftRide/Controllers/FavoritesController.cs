@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 
-namespace WebShopApp.Controllers
+namespace GiftRide.Controllers
 {
     public class FavoritesController : Controller
     {
