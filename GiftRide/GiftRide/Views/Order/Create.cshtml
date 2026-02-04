@@ -2,6 +2,17 @@
 @{
 ViewData["Title"] = "Create";
 }
+
+<style>
+    body {
+        font-family: 'Montserrat', sans-serif;
+        background-color: #f8fafc;
+        background-image: radial-gradient(at 0% 0%, rgba(45, 212, 191, 0.15) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(244, 63, 94, 0.15) 0px, transparent 50%);
+        background-attachment: fixed;
+    }
+</style>
+
+
 <h1>Поръчай</h1>
 <hr />
 <div class="row">
@@ -55,15 +66,7 @@ warning">Back to Products</a>
     </div>
 </div>
 
-<style>
-    body {
-        font-family: 'Montserrat', sans-serif;
-        background-color: #f8fafc;
-        background-image: radial-gradient(at 0% 0%, rgba(45, 212, 191, 0.15) 0px, transparent 50%), 
-        radial-gradient(at 100% 100%, rgba(244, 63, 94, 0.15) 0px, transparent 50%);
-        background-attachment: fixed;
-    }
-</style>
+
 <script>
     function calcSum() {
     let q = document.getElementsByName('Quantity')[0].value;

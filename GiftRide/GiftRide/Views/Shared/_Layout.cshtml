@@ -123,7 +123,7 @@
             }
 
 
-        /* --- CHATBOT STYLES --- */
+        /*Chatbot styling*/
 
         #chat-widget-container {
             position: fixed;
@@ -133,7 +133,7 @@
             font-family: 'Montserrat', sans-serif;
         }
 
-        /* Кръглият бутон */
+       
         #chat-toggle-btn {
             width: 60px;
             height: 60px;
@@ -154,7 +154,7 @@
                 transform: scale(1.1);
             }
 
-        /* Прозорецът */
+        
         #chat-window {
             width: 350px;
             height: 450px;
@@ -172,14 +172,14 @@
             transform: translateY(0);
         }
 
-        /* Скрит режим */
+       
         .chat-hidden {
-            display: none !important; /* Или използвай opacity/pointer-events за анимация */
+            display: none !important; 
         }
 
-        /* Хедър */
+        
         .chat-header {
-            background: linear-gradient(135deg, #2dd4bf, #0ea5e9); /* Твоят син градиент */
+            background: linear-gradient(135deg, #2dd4bf, #0ea5e9); 
             color: white;
             padding: 15px;
             display: flex;
@@ -195,7 +195,7 @@
             cursor: pointer;
         }
 
-        /* Тяло (Съобщения) */
+        /* Message */
         .chat-body {
             flex: 1;
             padding: 15px;
@@ -206,7 +206,7 @@
             gap: 10px;
         }
 
-        /* Футър (Инпут) */
+        /* Input */
         .chat-footer {
             padding: 10px;
             background: #fff;
@@ -234,10 +234,10 @@
             cursor: pointer;
         }
 
-        /* БАЛОНЧЕТА СЪОБЩЕНИЯ */
+       
         .bot-msg {
             align-self: flex-start;
-            background: #e0f2fe; /* Светло синьо */
+            background: #e0f2fe;
             color: #334155;
             padding: 10px 15px;
             border-radius: 15px 15px 15px 0;
@@ -248,7 +248,7 @@
 
         .user-msg {
             align-self: flex-end;
-            background: #f43f5e; /* Твоят акцентен цвят */
+            background: #f43f5e;
             color: white;
             padding: 10px 15px;
             border-radius: 15px 15px 0 15px;
@@ -399,43 +399,41 @@
 
 
     <script>
-        // 1. Отваряне и затваряне на чата
+        // Отваряне и затваряне на чата
         function toggleChat() {
             var chatWindow = document.getElementById('chat-window');
             if (chatWindow.classList.contains('chat-hidden')) {
                 chatWindow.classList.remove('chat-hidden');
-                // Фокус върху полето
+                
                 setTimeout(() => document.getElementById('user-input').focus(), 100);
             } else {
                 chatWindow.classList.add('chat-hidden');
             }
         }
 
-        // 2. Слушаме за Enter
+        //Търси Enter
         function handleKeyPress(e) {
             if (e.key === 'Enter') {
                 sendMessage();
             }
         }
 
-        // 3. Изпращане на съобщение
+        // Изпращане на съобщение
         function sendMessage() {
             var inputField = document.getElementById('user-input');
             var message = inputField.value.trim();
 
             if (message === "") return;
 
-            // Добавяме съобщението на потребителя в чата
+            // Добавя съобщението на потребителя в чата
             addMessage(message, 'user-msg');
             inputField.value = ''; // Чистим полето
 
-            // Показваме, че ботът мисли... (опционално)
-            // ...
 
             // AJAX ЗАЯВКА КЪМ СЪРВЪРА
             $.ajax({
                 type: "POST",
-                url: "/Chat/GetResponse", // Пътят към контролера
+                url: "/Chat/GetResponse", 
                 data: { message: message },
                 success: function (response) {
                     // Добавяме отговора на бота
@@ -447,7 +445,7 @@
             });
         }
 
-        // 4. Помощна функция за рисуване на балончета
+        //Функция за рисуване на балончета
         function addMessage(text, className) {
             var chatBody = document.getElementById('chat-messages');
             var div = document.createElement('div');
@@ -455,7 +453,7 @@
             div.innerText = text;
             chatBody.appendChild(div);
 
-            // Скролваме най-долу
+            // Скролва най-долу
             chatBody.scrollTop = chatBody.scrollHeight;
         }
     </script>
