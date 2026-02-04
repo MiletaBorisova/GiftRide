@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<GiftRide.Models.Product.ProductIndexVM>
 
 @{
-    ViewData["Title"] = "Продукти";
+    ViewData["Title"] = "Избери преживяване";
 }
 
 <style>
@@ -14,11 +14,13 @@
 
     .product-card {
         transition: transform 0.2s, box-shadow 0.2s;
+        border: none;
+        background: #fff;
     }
 
         .product-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;
+            box-shadow: 0 10px 20px rgba(244, 63, 94, 0.2) !important;
         }
 
     .text-truncate-2 {
@@ -31,18 +33,68 @@
     .object-fit-cover {
         object-fit: cover;
     }
+
+
+    
+    .btn-theme-gradient {
+        background: linear-gradient(135deg, #f43f5e 0%, #f97316 100%);
+        border: none;
+        color: white !important;
+        font-weight: 600;
+        transition: opacity 0.2s ease;
+    }
+
+        .btn-theme-gradient:hover {
+            opacity: 0.9;
+            color: white;
+        }
+        .btn-blue-gradient {
+         background: linear-gradient(135deg, var(--gift-teal), var(--gift-blue));
+        color: white !important;
+        }
+
+    .btn-outline-teal {
+        color: #0d9488; 
+        border: 1px solid #2dd4bf; ]
+        background: white;
+        transition: all 0.2s;
+    }
+
+        .btn-outline-teal:hover {
+            background: #2dd4bf;
+            color: white;
+            border-color: #2dd4bf;
+        }
+
+   
+    .btn-outline-pink {
+        color: #f43f5e;
+        border: 1px solid #f43f5e;
+        background: white;
+        transition: all 0.2s;
+    }
+
+        .btn-outline-pink:hover {
+            background: #f43f5e;
+            color: white;
+        }
+
+   
+    .price-highlight {
+        color: #f43f5e; 
+    }
 </style>
 
 
 <div class="container my-5">
-    <h1 class="mb-4">Products</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-bold text-dark">Избери преживяване</h1>
 
-@if (User.Identity.IsAuthenticated && User.IsInRole("Administrator"))
-{
-        <a asp-action="Create" class="btn btn-primary mb-4">Create New</a>
-}
-
-    <!-- FILTER -->
+        @if (User.Identity.IsAuthenticated && User.IsInRole("Administrator"))
+        {
+            <a asp-action="Create" class="btn btn-theme-gradient rounded-pill px-4">Create New</a>
+        }
+    </div>
 
     <form asp-controller="Product" asp-action="Index" method="get" class="row g-3 mb-4 align-items-end">
         <div class="col-md-3">
@@ -65,96 +117,85 @@
             </select>
         </div>
         <div class="col-md-2">
-            <button type="submit" class="btn btn-primary w-100">
+            <button type="submit" class="btn btn-blue-gradient w-100">
                 Filter
             </button>
         </div>
     </form>
 
 
-<div class="container my-5">
-    <div class="row g-4">
-        @foreach (var item in Model)
-        {
-            <div class="col-md-6 col-lg-4 col-xl-3">
-                <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden product-card">
+    <div class="container my-5">
+        <div class="row g-4">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-6 col-lg-4 col-xl-3">
+                    <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden product-card">
 
-                    <a asp-controller="Product" asp-action="Details" asp-route-id="@item.Id" class="text-decoration-none">
-                        <div class="ratio ratio-4x3">
-                            <img src="@item.Picture"
-                                 class="card-img-top object-fit-cover"
-                                 alt="@item.ProductName">
-                        </div>
-                    </a>
-
-                    <div class="card-body d-flex flex-column">
-
-                        
-                        <a asp-controller="Product" asp-action="Details" asp-route-id="@item.Id" class="text-decoration-none text-dark">
-                            <h6 class="card-title fw-bold mb-2 text-truncate-2" style="min-height: 2.5em;">
-                                @item.ProductName
-                            </h6>
+                        <a asp-controller="Product" asp-action="Details" asp-route-id="@item.Id" class="text-decoration-none">
+                            <div class="ratio ratio-4x3">
+                                <img src="@item.Picture"
+                                     class="card-img-top object-fit-cover"
+                                     alt="@item.ProductName">
+                            </div>
                         </a>
 
-                        
-                        <div class="mb-3">
-                            <span class="text-muted small">Цена:</span>
+                        <div class="card-body d-flex flex-column">
 
-                            <div class="mt-1">
-                                @if (item.Discount > 0)
-                                {
-                                    
-                                    <span class="text-muted text-decoration-line-through me-2 small">
-                                        @item.Price.ToString("0.00") €
-                                    </span>                                   
-                                    <span class="fw-bold text-danger fs-5">
-                                        
-                                        @((item.Price * (1 - item.Discount / 100m)).ToString("0.00")) €
-                                    </span>                                   
-                                    <span class="badge bg-danger ms-2">
-                                        -@item.Discount.ToString("0")%
-                                    </span>
-                                }
-                                else
-                                {
-                                   
-                                    <span class="fw-bold fs-5">
-                                        @item.Price.ToString("0.00") €
-                                    </span>
-                                }
-                            </div>
-                        </div>
-
-                        
-                        <div class="mt-auto d-grid gap-2">
-
-                           
-                            <div class="d-flex gap-2">
-                                <a asp-controller="Cart" asp-action="Add" asp-route-productId="@item.Id"
-                                   class="btn btn-outline-primary flex-grow-1" title="Добави в количка">
-                                    <i class="bi bi-cart-plus"></i> Добави в количка
-                                </a>
-
-                                <a asp-controller="Favorites" asp-action="Add" asp-route-productId="@item.Id"
-                                   class="btn btn-outline-danger" title="Добави в любими">
-                                    <i class="bi bi-heart"></i>
-                                </a>
-                            </div>
-
-                            
-                            <a asp-controller="Order" asp-action="Create" asp-route-id="@item.Id"
-                               class="btn btn-primary fw-bold">
-                                Поръчай сега
+                            <a asp-controller="Product" asp-action="Details" asp-route-id="@item.Id" class="text-decoration-none text-dark">
+                                <h6 class="card-title fw-bold mb-2 text-truncate-2" style="min-height: 2.5em;">
+                                    @item.ProductName
+                                </h6>
                             </a>
-                        </div>
 
+                            <div class="mb-3">
+                                <span class="text-muted small">Цена:</span>
+
+                                <div class="mt-1">
+                                    @if (item.Discount > 0)
+                                    {
+                                        <span class="text-muted text-decoration-line-through me-2 small">
+                                            @item.Price.ToString("0.00") €
+                                        </span>
+                                        <span class="fw-bold fs-5 price-highlight">
+                                            @((item.Price * (1 - item.Discount / 100m)).ToString("0.00")) €
+                                        </span>
+                                        <span class="badge bg-danger ms-2">
+                                            -@item.Discount.ToString("0")%
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="fw-bold fs-5 text-dark">
+                                            @item.Price.ToString("0.00") €
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="mt-auto d-grid gap-2">
+
+                                <div class="d-flex gap-2">
+                                    <a asp-controller="Cart" asp-action="Add" asp-route-productId="@item.Id"
+                                       class="btn btn-outline-teal flex-grow-1" title="Добави в количка">
+                                        <i class="bi bi-cart-plus"></i> Добави
+                                    </a>
+
+                                    <a asp-controller="Favorites" asp-action="Add" asp-route-productId="@item.Id"
+                                       class="btn btn-outline-pink" title="Добави в любими">
+                                        <i class="bi bi-heart"></i>
+                                    </a>
+                                </div>
+
+                                <a asp-controller="Order" asp-action="Create" asp-route-id="@item.Id"
+                                   class="btn btn-theme-gradient fw-bold">
+                                    Поръчай сега
+                                </a>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
 </div>
-
-
-
-
