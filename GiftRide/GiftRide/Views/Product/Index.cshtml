@@ -149,47 +149,52 @@
 
                             <div class="mb-3">
                                 <span class="text-muted small">Цена:</span>
-
                                 <div class="mt-1">
                                     @if (item.Discount > 0)
                                     {
-                                        <span class="text-muted text-decoration-line-through me-2 small">
-                                            @item.Price.ToString("0.00") €
-                                        </span>
-                                        <span class="fw-bold fs-5 price-highlight">
-                                            @((item.Price * (1 - item.Discount / 100m)).ToString("0.00")) €
-                                        </span>
-                                        <span class="badge bg-danger ms-2">
-                                            -@item.Discount.ToString("0")%
-                                        </span>
+                                        <span class="text-muted text-decoration-line-through me-2 small">@item.Price.ToString("0.00") €</span>
+                                        <span class="fw-bold fs-5 price-highlight">@((item.Price * (1 - item.Discount / 100m)).ToString("0.00")) €</span>
+                                        <span class="badge bg-danger ms-2">-@item.Discount.ToString("0")%</span>
                                     }
                                     else
                                     {
-                                        <span class="fw-bold fs-5 text-dark">
-                                            @item.Price.ToString("0.00") €
-                                        </span>
+                                        <span class="fw-bold fs-5 text-dark">@item.Price.ToString("0.00") €</span>
                                     }
                                 </div>
                             </div>
 
                             <div class="mt-auto d-grid gap-2">
 
-                                <div class="d-flex gap-2">
-                                    <a asp-controller="Cart" asp-action="Add" asp-route-productId="@item.Id"
-                                       class="btn btn-outline-teal flex-grow-1" title="Добави в количка">
-                                        <i class="bi bi-cart-plus"></i> Добави
+                                @if (item.Quantity > 0)
+                                {
+                                    <div class="d-flex gap-2">
+                                        <a asp-controller="Cart" asp-action="Add" asp-route-productId="@item.Id"
+                                           class="btn btn-outline-teal flex-grow-1" title="Добави в количка">
+                                            <i class="bi bi-cart-plus"></i> Добави
+                                        </a>
+
+                                        <a asp-controller="Favorites" asp-action="Add" asp-route-productId="@item.Id"
+                                           class="btn btn-outline-pink" title="Добави в любими">
+                                            <i class="bi bi-heart"></i>
+                                        </a>
+                                    </div>
+
+                                    <a asp-controller="Order" asp-action="Create" asp-route-id="@item.Id"
+                                       class="btn btn-theme-gradient fw-bold">
+                                        Поръчай сега
                                     </a>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-secondary fw-bold" disabled style="background-color: #e2e8f0; color: #64748b; border:none;">
+                                        <i class="bi bi-x-circle"></i> ИЗЧЕРПАНО
+                                    </button>
 
                                     <a asp-controller="Favorites" asp-action="Add" asp-route-productId="@item.Id"
-                                       class="btn btn-outline-pink" title="Добави в любими">
-                                        <i class="bi bi-heart"></i>
+                                       class="btn btn-outline-pink w-100" title="Добави в любими">
+                                        <i class="bi bi-heart"></i> Запази в Любими
                                     </a>
-                                </div>
-
-                                <a asp-controller="Order" asp-action="Create" asp-route-id="@item.Id"
-                                   class="btn btn-theme-gradient fw-bold">
-                                    Поръчай сега
-                                </a>
+                                }
                             </div>
 
                         </div>

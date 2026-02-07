@@ -1,6 +1,6 @@
 ﻿@model GiftRide.Models.Order.OrderCreateVM
 @{
-ViewData["Title"] = "Create";
+    ViewData["Title"] = "Поръчай";
 }
 
 <style>
@@ -10,59 +10,162 @@ ViewData["Title"] = "Create";
         background-image: radial-gradient(at 0% 0%, rgba(45, 212, 191, 0.15) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(244, 63, 94, 0.15) 0px, transparent 50%);
         background-attachment: fixed;
     }
+
+    .order-card {
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        border: none;
+        overflow: hidden;
+        padding: 30px;
+    }
+
+    
+    .control-label {
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #64748b;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+  
+    .form-control {
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 12px;
+        font-weight: 600;
+        color: #334155;
+    }
+
+        .form-control:focus {
+            border-color: #f43f5e;
+            box-shadow: 0 0 0 4px rgba(244, 63, 94, 0.1);
+        }
+
+       
+        .form-control[readonly] {
+            background-color: #f8fafc;
+            color: #94a3b8;
+        }
+
+    
+    .product-preview-img {
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        width: 100%;
+        max-width: 250px;
+        height: auto;
+        object-fit: cover;
+        display: block;
+        margin: 10px auto;
+    }
+
+    
+    .btn-theme-gradient {
+        background: linear-gradient(135deg, #f43f5e 0%, #f97316 100%);
+        border: none;
+        color: white;
+        font-weight: 700;
+        padding: 12px 20px;
+        border-radius: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: transform 0.2s, box-shadow 0.2s;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+        .btn-theme-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(244, 63, 94, 0.3);
+            color: white;
+        }
+
+    .btn-outline-back {
+        color: #64748b;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: block;
+        text-align: center;
+        padding: 10px;
+        transition: color 0.2s;
+    }
+
+        .btn-outline-back:hover {
+            color: #1e293b;
+        }
+
+    .highlight-price {
+        color: #f43f5e;
+        font-weight: 800;
+        font-size: 1.2rem;
+    }
 </style>
 
 
-<h1>Поръчай</h1>
-<hr />
-<div class="row">
-<div class="col-md-4">
-<form asp-action="Create">
-<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-<div class="form-group">
-                <input type="hidden" asp-for="ProductId" class="form-control"
-                       readonly="readonly" />
-            </div>
-            <div class="form-group">
-                <label asp-for="ProductName" class="control-label"></label>
-                <input asp-for="ProductName" class="form-control" readonly="readonly" />
-            </div>
-            <div class="form-group">
-                <label asp-for="Picture" class="control-label"></label>
-                <input type="hidden" asp-for="Picture" class="form-control"
-                       readonly="readonly" />
-                <div>
-                    <img src="@Html.DisplayFor(model => model.Picture)" alt="Image"
-                         width="100" />
-                </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" readonly="readonly" />
-            </div>
-            <div class="form-group">
-                <label asp-for="Discount" class="control-label"></label>
-                <input asp-for="Discount" class="form-control" readonly="readonly" />
-            </div>
-            <div class="form-group">
-                <label asp-for="Quantity" class="control-label"></label>
-                <input asp-for="Quantity" class="form-control" onclick="calcSum()" />
-                <span asp-validation-for="Quantity" class="text-danger"></span>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
 
+            <div class="text-center mb-4">
+                <h2 class="fw-bold text-dark">Завършване на поръчка</h2>
             </div>
-            <div class="form-group">
-                <label asp-for="TotalPrice" class="control-label"></label>
-                <input asp-for="TotalPrice" class="form-control" readonly="readonly" />
-            </div>
-            <br />
-            <div class="form-group">
-                <input type="submit" value="Order" class="btn btn-primary" />
 
-                <a asp-action="Index" asp-controller="Product" class="btn btn-
-warning">Back to Products</a>
+            <div class="order-card">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+                    <div class="form-group mb-3">
+                        <input type="hidden" asp-for="ProductId" class="form-control" readonly="readonly" />
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="ProductName" class="control-label">Продукт</label>
+                        <input asp-for="ProductName" class="form-control" readonly="readonly" />
+                    </div>
+
+                    <div class="form-group mb-3 text-center">
+                        <label asp-for="Picture" class="control-label d-none">Снимка</label>
+                        <input type="hidden" asp-for="Picture" class="form-control" readonly="readonly" />
+                        <div>
+                            <img src="@Html.DisplayFor(model => model.Picture)" alt="Image" class="product-preview-img" />
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Price" class="control-label">Единична цена €</label>
+                        <input asp-for="Price"  class="form-control" readonly="readonly" />
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Discount" class="control-label">Отстъпка (%)</label>
+                        <input asp-for="Discount" class="form-control" readonly="readonly" />
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Quantity" class="control-label text-dark fw-bold">Количество (Брой)</label>
+                        <input asp-for="Quantity" class="form-control border-danger text-center fs-5" oninput="calcSum()" onclick="calcSum()" />
+                        <span asp-validation-for="Quantity" class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label asp-for="TotalPrice" class="control-label">Крайна сума €</label>
+                        <input asp-for="TotalPrice" class="form-control highlight-price text-center" readonly="readonly" />
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" value="Потвърди и Поръчай" class="btn btn-theme-gradient" />
+
+                        <a asp-action="Index" asp-controller="Product" class="btn-outline-back">
+                            <i class="bi bi-arrow-left"></i> Назад към продуктите
+                        </a>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 

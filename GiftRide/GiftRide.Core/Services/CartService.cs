@@ -52,12 +52,13 @@ namespace GiftRide.Core.Services
             var item = cart.Items.FirstOrDefault(i => i.ProductId == productId);
 
             var product = _productService.GetProductById(productId);
-            if (product == null) return;
+            if (product == null || product.Quantity < 1) return;
 
             var priceWithDiscount = product.Price * (1 - product.Discount / 100m);
 
             if (item == null)
             {
+                if (quantity > product.Quantity) quantity = product.Quantity;
                 item = new CartItem
                 {
                     ProductId = productId,
@@ -68,7 +69,16 @@ namespace GiftRide.Core.Services
             }
             else
             {
-                item.Quantity += quantity;
+                if (item.Quantity + quantity <= product.Quantity)
+                {
+                    item.Quantity += quantity;
+                }
+                else
+                {
+                   
+                    item.Quantity = product.Quantity;
+                }
+
             }
 
             await _context.SaveChangesAsync();
@@ -99,9 +109,18 @@ namespace GiftRide.Core.Services
         {
             var cart = await GetCartByUserIdAsync(userId);
             var item = cart.Items.FirstOrDefault(i => i.ProductId == productId);
-            if (item != null)
+            var product = _productService.GetProductById(productId);
+
+            if (item != null && product != null)
             {
+              
+                if (quantity > product.Quantity)
+                {
+                    quantity = product.Quantity; 
+                }
+
                 item.Quantity = quantity;
+
                 if (item.Quantity <= 0)
                 {
                     cart.Items.Remove(item);

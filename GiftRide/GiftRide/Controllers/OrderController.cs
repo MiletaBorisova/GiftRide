@@ -93,7 +93,7 @@ namespace GiftRide.Controllers
                     // Взимаме статуса от ваучера
                     Status = voucher?.Status ?? ReservationStatus.None,
 
-                    // За да показваш датата, ако е резервиран
+                    // За да показва датата, ако е резервиран
                     ReservationDate = voucher?.ReservationDate
                 };
             }).ToList();
@@ -115,6 +115,11 @@ namespace GiftRide.Controllers
             if (product == null)
             {
                 return NotFound();
+            }
+
+            if (product.Quantity < 1)
+            {
+                return RedirectToAction("Denied", "Order"); 
             }
 
             OrderCreateVM order = new OrderCreateVM()
@@ -208,8 +213,20 @@ namespace GiftRide.Controllers
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var cart = await _cartService.GetCartByUserIdAsync(userId);
 
+
             if (!cart.Items.Any())
                 return RedirectToAction("Index", "Cart");
+
+            foreach (var item in cart.Items)
+            {
+                var productInDb = _productService.GetProductById(item.ProductId);
+                if (productInDb == null || productInDb.Quantity < item.Quantity)
+                {
+                    TempData["Error"] = $"Продуктът '{productInDb?.ProductName}' вече няма достатъчна наличност! Налични: {productInDb?.Quantity}";
+                    return RedirectToAction("Index", "Cart");
+                }
+            }
+
             decimal promoDiscount = cart.AppliedPromoDiscountPercent;
 
             foreach (var item in cart.Items)
