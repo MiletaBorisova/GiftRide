@@ -124,7 +124,7 @@ namespace GiftRide.Core.Services
                 Price = product.Price,
 
                 //discount + promocode %
-                Discount = totalDiscountToRecord,
+                Discount = 100 - (100 - productDiscount) * (100 - promoDiscountPercent) / 100,
 
 
                 TotalPrice = finalUnitPrice * cartItem.Quantity

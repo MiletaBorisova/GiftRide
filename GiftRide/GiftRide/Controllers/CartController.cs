@@ -25,6 +25,7 @@ namespace GiftRide.Controllers
             _context = context;
         }
 
+        //pomoshtem metod za namirane na potrebitel
         private string GetUserId() => _userManager.GetUserId(User);
 
         // GET: CartController
@@ -79,9 +80,6 @@ namespace GiftRide.Controllers
             }
             return RedirectToAction("Index");
         }
-
-
-
 
         [HttpPost]
         [Authorize]
