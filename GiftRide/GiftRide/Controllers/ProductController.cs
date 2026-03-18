@@ -34,7 +34,7 @@ namespace GiftRide.Controllers
 
         // GET: ProductController
         [AllowAnonymous]
-        public ActionResult Index(string searchStringCategoryName, string searchStringValidityName, string sort)
+        public ActionResult Index(string searchStringCategoryName, string searchStringValidityName, string sort, bool filterByPrice = false, bool hasDiscount = false)
         {
             List<ProductIndexVM> products = _productService.GetProducts(searchStringCategoryName, searchStringValidityName)
                  .Select(product => new ProductIndexVM
@@ -53,6 +53,19 @@ namespace GiftRide.Controllers
 
 
                  }).ToList();
+
+            if (filterByPrice)
+            {
+                products = products.Where(p => p.Price >= 40 &&  p.Price <= 60).ToList();
+            }
+            ViewBag.filterByPrice = filterByPrice;
+
+            if (hasDiscount)
+            {
+                products = products.Where(p => p.Discount > 0).ToList();
+            }
+            ViewBag.hasDiscount = hasDiscount;
+           
 
             switch (sort)
             {
@@ -73,6 +86,8 @@ namespace GiftRide.Controllers
                     break;
             }
 
+
+            
 
             return this.View(products);
         }
@@ -138,27 +153,6 @@ namespace GiftRide.Controllers
                     return RedirectToAction(nameof(Index));
                 }
             }
-            //            // 2. КРИТИЧНИЯТ ПРОБЛЕМ (Dropdown списъците)
-            //            В методите Create(POST) и Edit(POST), ако ModelState.IsValid върне false(например ако си забравил да напишеш име на продукт),
-            //            кодът отива най - долу на return View(product);.
-
-            //             Проблемът: В този момент списъците product.Validities и product.Categories са NULL(защото HTTP заявката не ги помни).
-            //             Това ще хвърли грешка в браузъра(NullReferenceException), когато се опита да зареди страницата отново.
-
-            // --- ВАЖНО: АКО ИМА ГРЕШКА, ПРЕЗАРЕЖДАМЕ СПИСЪЦИТЕ ---
-
-            //product.Validities = _validityService.GetValidities()
-            //.Select(x => new Models.Validity.ValidityPairVM 
-            //{ Id = x.Id, Name = x.ValidityName })
-            //.ToList();
-
-
-
-
-            //product.Categories = _categoryService.GetCategories()
-            //    .Select(x => new Models.Category.CategoryPairVM 
-            //    { Id = x.Id, Name = x.CategoryName }).
-            //    ToList();
             return View();
         }
 

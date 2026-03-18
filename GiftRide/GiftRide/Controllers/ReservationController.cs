@@ -85,14 +85,14 @@ namespace GiftRide.Controllers
 
             bool result = _reservationService.ChangeStatus(voucherId, newStatus);
 
-            if (result)
-            {
-                TempData["Success"] = "Статусът е променен успешно!";
-            }
-            else
-            {
-                TempData["Error"] = "Възникна грешка при промяната.";
-            }
+            //if (result)
+            //{
+            //    TempData["Success"] = "Статусът е променен успешно!";
+            //}
+            //else
+            //{
+            //    TempData["Error"] = "Възникна грешка при промяната.";
+            //}
 
             
             return RedirectToAction("Index", "Order");

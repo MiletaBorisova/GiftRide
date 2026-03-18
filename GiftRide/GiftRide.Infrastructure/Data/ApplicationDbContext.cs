@@ -22,6 +22,7 @@ namespace GiftRide.Infrastructure.Data
         public DbSet<Validity> Validities { get; set; }
         public DbSet<Voucher> Vouchers { get; set; }
         public DbSet<FaqEntry> FaqEntries { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
 
 
 

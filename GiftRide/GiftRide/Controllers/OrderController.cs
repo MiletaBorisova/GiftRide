@@ -33,8 +33,7 @@ namespace GiftRide.Controllers
         [Authorize(Roles = "Administrator")]
         public ActionResult Index()
         {
-            //string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            //var user = context.Users.SingleOrDefault(u => u.Id == userId);
+            
             var ordersList = _orderService.GetOrders();
 
             List<OrderIndexVM> orders = ordersList
@@ -72,7 +71,7 @@ namespace GiftRide.Controllers
 
             var model = orders.Select(o =>
             {
-                // Vziama se purvia vaucher ot spisuka
+                // Взима се първият ваучер от списъка
                 var voucher = o.Vouchers.FirstOrDefault();
 
                 return new OrderIndexVM
@@ -101,11 +100,7 @@ namespace GiftRide.Controllers
             return View(model);
         }
 
-        // GET: OrderController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
+      
 
         // GET: OrderController/Create
         public ActionResult Create(int id)
@@ -156,55 +151,6 @@ namespace GiftRide.Controllers
             return this.RedirectToAction("Index", "Product");
         }
 
-        //GET: OrderController/Denied
-        public ActionResult Denied()
-        {
-            return View();
-        }
-
-        // GET: OrderController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: OrderController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: OrderController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: OrderController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -241,6 +187,11 @@ namespace GiftRide.Controllers
             return RedirectToAction("Success", "Order");
         }
         public IActionResult Success()
+        {
+            return View();
+        }
+        //GET: OrderController/Denied
+        public ActionResult Denied()
         {
             return View();
         }
