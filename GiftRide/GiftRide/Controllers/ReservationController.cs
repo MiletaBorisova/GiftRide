@@ -83,18 +83,7 @@ namespace GiftRide.Controllers
             // Preobrazuva se chisloto kum enum-a za ReservationStatus
             ReservationStatus newStatus = (ReservationStatus)statusId;
 
-            bool result = _reservationService.ChangeStatus(voucherId, newStatus);
-
-            //if (result)
-            //{
-            //    TempData["Success"] = "Статусът е променен успешно!";
-            //}
-            //else
-            //{
-            //    TempData["Error"] = "Възникна грешка при промяната.";
-            //}
-
-            
+            bool result = _reservationService.ChangeStatus(voucherId, newStatus);                      
             return RedirectToAction("Index", "Order");
         }
     }
