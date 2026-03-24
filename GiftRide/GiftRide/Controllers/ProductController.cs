@@ -34,7 +34,7 @@ namespace GiftRide.Controllers
 
         // GET: ProductController
         [AllowAnonymous]
-        public ActionResult Index(string searchStringCategoryName, string searchStringValidityName, string sort, bool filterByPrice = false, bool hasDiscount = false)
+        public ActionResult Index(string searchStringCategoryName, string searchStringValidityName, string sort)
         {
             List<ProductIndexVM> products = _productService.GetProducts(searchStringCategoryName, searchStringValidityName)
                  .Select(product => new ProductIndexVM
@@ -53,18 +53,6 @@ namespace GiftRide.Controllers
 
 
                  }).ToList();
-
-            if (filterByPrice)
-            {
-                products = products.Where(p => p.Price >= 40 &&  p.Price <= 60).ToList();
-            }
-            ViewBag.filterByPrice = filterByPrice;
-
-            if (hasDiscount)
-            {
-                products = products.Where(p => p.Discount > 0).ToList();
-            }
-            ViewBag.hasDiscount = hasDiscount;
            
 
             switch (sort)
