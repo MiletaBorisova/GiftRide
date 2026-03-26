@@ -1,5 +1,6 @@
 ﻿using GiftRide.Core.Contracts;
 using GiftRide.Infrastructure.Data.Entities;
+using GiftRide.Models.Favorites;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -23,12 +24,29 @@ namespace GiftRide.Controllers
 
         private string GetUserId() => _userManager.GetUserId(User);
 
+
         public async Task<IActionResult> Index()
         {
             var userId = GetUserId();
             var products = await _favoriteService.GetFavoritesAsync(userId);
-            return View(products);
+            var favoriteViewModels = products.Select(p => new FavoriteVM
+            {
+                Id = p.Id,
+                ProductName = p.ProductName,
+                Picture = p.Picture,
+                Price = p.Price
+            }).ToList();
+
+            // Подаваме изчистения модел към изгледа
+            return View(favoriteViewModels);
         }
+
+        //public async Task<IActionResult> Index()
+        //{
+        //    var userId = GetUserId();
+        //    var products = await _favoriteService.GetFavoritesAsync(userId);
+        //    return View(products);
+        //}
 
 
         public async Task<IActionResult> Add(int productId)

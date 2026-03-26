@@ -28,10 +28,7 @@
             <h5>Ваучер №: @Model.VoucherCode</h5>
         </div>
         <div class="card-body">
-            @if (TempData["Error"] != null)
-            {
-                <div class="alert alert-danger">@TempData["Error"]</div>
-            }
+            
 
             <form asp-controller="Reservation" asp-action="ConfirmReservation" method="post">
 

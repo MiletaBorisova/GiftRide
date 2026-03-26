@@ -29,13 +29,42 @@ namespace GiftRide.Controllers
         private string GetUserId() => _userManager.GetUserId(User);
 
         // GET: CartController
+
         public async Task<IActionResult> Index()
         {
             var userId = GetUserId();
+
+            
             var cart = await _cartService.GetCartByUserIdAsync(userId);
-            ViewBag.Total = _cartService.CalculateTotalWithPromo(cart);
-            return View(cart);
+
+            
+            var finalTotal = _cartService.CalculateTotalWithPromo(cart);
+
+            
+            var cartVM = new GiftRide.Models.Cart.CartVM
+            {
+                AppliedPromoDiscountPercent = cart.AppliedPromoDiscountPercent,
+                FinalTotal = finalTotal,
+                Items = cart.Items.Select(i => new GiftRide.Models.Cart.CartItemVM
+                {
+                    ProductId = i.ProductId,
+                    ProductName = i.Product!.ProductName,
+                    Picture = i.Product.Picture,
+                    Price = i.Price,
+                    Quantity = i.Quantity
+                }).ToList()
+            };
+
+            
+            return View(cartVM);
         }
+        //public async Task<IActionResult> Index()
+        //{
+        //    var userId = GetUserId();
+        //    var cart = await _cartService.GetCartByUserIdAsync(userId);
+        //    ViewBag.Total = _cartService.CalculateTotalWithPromo(cart);
+        //    return View(cart);
+        //}
 
         public async Task<IActionResult> Add(int productId)
         {

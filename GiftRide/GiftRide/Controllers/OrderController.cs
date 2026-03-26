@@ -151,41 +151,74 @@ namespace GiftRide.Controllers
             return this.RedirectToAction("Index", "Product");
         }
 
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> CreateFromCart()
+        public async Task<IActionResult> CreateFromCart(GiftRide.Models.Cart.CartVM model)
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var cart = await _cartService.GetCartByUserIdAsync(userId);
-
-
-            if (!cart.Items.Any())
+            
+            var userId = _userManager.GetUserId(User);
+            if (model.Items == null || !model.Items.Any())
+            {
                 return RedirectToAction("Index", "Cart");
+            }
 
-            foreach (var item in cart.Items)
+            
+            foreach (var itemVM in model.Items)
             {
-                var productInDb = _productService.GetProductById(item.ProductId);
-                if (productInDb == null || productInDb.Quantity < item.Quantity)
+                
+                var cartItem = new CartItem
                 {
-                    TempData["Error"] = $"Продуктът '{productInDb?.ProductName}' вече няма достатъчна наличност! Налични: {productInDb?.Quantity}";
-                    return RedirectToAction("Index", "Cart");
-                }
+                    ProductId = itemVM.ProductId,
+                    Quantity = itemVM.Quantity,
+                    Price = itemVM.Price
+                };
+
+                
+                _orderService.CreateFromCartItem(cartItem, userId, model.AppliedPromoDiscountPercent);
             }
-
-            decimal promoDiscount = cart.AppliedPromoDiscountPercent;
-
-            foreach (var item in cart.Items)
-            {
-
-                _orderService.CreateFromCartItem(item, userId, promoDiscount);
-            }
-
 
             await _cartService.ResetCartAsync(userId);
 
-            return RedirectToAction("Success", "Order");
+            TempData["Success"] = "Поръчката е създадена успешно!";       
+            return RedirectToAction("MyOrders", "Order");
         }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //[Authorize]
+        //public async Task<IActionResult> CreateFromCart()
+        //{
+        //    string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //    var cart = await _cartService.GetCartByUserIdAsync(userId);
+
+
+        //    if (!cart.Items.Any())
+        //        return RedirectToAction("Index", "Cart");
+
+        //    foreach (var item in cart.Items)
+        //    {
+        //        var productInDb = _productService.GetProductById(item.ProductId);
+        //        if (productInDb == null || productInDb.Quantity < item.Quantity)
+        //        {
+        //            TempData["Error"] = $"Продуктът '{productInDb?.ProductName}' вече няма достатъчна наличност! Налични: {productInDb?.Quantity}";
+        //            return RedirectToAction("Index", "Cart");
+        //        }
+        //    }
+
+        //    decimal promoDiscount = cart.AppliedPromoDiscountPercent;
+
+        //    foreach (var item in cart.Items)
+        //    {
+
+        //        _orderService.CreateFromCartItem(item, userId, promoDiscount);
+        //    }
+
+
+        //    await _cartService.ResetCartAsync(userId);
+
+        //    return RedirectToAction("Success", "Order");
+        //}
         public IActionResult Success()
         {
             return View();

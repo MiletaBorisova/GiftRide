@@ -1,4 +1,4 @@
-﻿@model GiftRide.Infrastructure.Data.Entities.Cart
+﻿@model GiftRide.Models.Cart.CartVM
 
 @{
     ViewData["Title"] = "Cart";
@@ -69,15 +69,15 @@
                                
                                 <div class="col-4 col-md-2">
                                     <div class="ratio ratio-1x1 rounded-3 overflow-hidden bg-white border">
-                                        <img src="@item.Product.Picture"
-                                             alt="@item.Product.ProductName"
+                                        <img src="@item.Picture"
+                                             alt="@item.ProductName"
                                              style="object-fit: cover;">
                                     </div>
                                 </div>
 
                                
                                 <div class="col-8 col-md-4">
-                                    <h6 class="fw-bold text-dark mb-1">@item.Product.ProductName</h6>
+                                    <h6 class="fw-bold text-dark mb-1">@item.ProductName</h6>
                                     <p class="text-muted small mb-0">Ед. цена: @item.Price.ToString("0.00") €</p>
                                 </div>
 
@@ -101,7 +101,7 @@
                                
                                 <div class="col-6 col-md-3 text-end">
                                     <div class="fw-bold fs-5 text-primary mb-1">
-                                        @((item.Price * item.Quantity).ToString("0.00")) €
+                                        @item.TotalPrice.ToString("0.00") €
                                     </div>
                                     <a asp-action="Remove"
                                        asp-route-productId="@item.ProductId"
@@ -187,13 +187,32 @@
                             <span class="h3 fw-bold text-primary mb-0">@finalTotal.ToString("F2") €</span>
                         </div>
 
-                        
+
                         <form asp-controller="Order" asp-action="CreateFromCart" method="post">
                             @Html.AntiForgeryToken()
+
+                            
+                            <input type="hidden" name="AppliedPromoDiscountPercent" value="@Model.AppliedPromoDiscountPercent" />
+
+                            
+                            @for (int i = 0; i < Model.Items.Count; i++)
+                            {
+                                <input type="hidden" name="Items[@i].ProductId" value="@Model.Items[i].ProductId" />
+                                <input type="hidden" name="Items[@i].Quantity" value="@Model.Items[i].Quantity" />
+                                <input type="hidden" name="Items[@i].Price" value="@Model.Items[i].Price" />
+                            }
+
                             <button type="submit" class="btn btn-success w-100 py-3 rounded-pill fw-bold shadow-sm btn-hover-scale">
                                 Потвърди поръчката <i class="bi bi-arrow-right ms-2"></i>
                             </button>
                         </form>
+                        
+                        @* <form asp-controller="Order" asp-action="CreateFromCart" method="post">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-success w-100 py-3 rounded-pill fw-bold shadow-sm btn-hover-scale">
+                                Потвърди поръчката <i class="bi bi-arrow-right ms-2"></i>
+                            </button>
+                        </form> *@
 
                         <div class="text-center mt-3">
                             <a asp-controller="Product" asp-action="Index" class="text-muted text-decoration-none small">
