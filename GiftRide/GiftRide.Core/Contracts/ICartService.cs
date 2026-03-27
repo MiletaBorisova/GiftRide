@@ -17,5 +17,7 @@ namespace GiftRide.Core.Contracts
        
         decimal CalculateTotalWithPromo(Cart cart);
         Task ResetCartAsync(string userId);
+
+        Task ApplyPromoCodeAsync(string userId, int discountPercent);
     }
 }

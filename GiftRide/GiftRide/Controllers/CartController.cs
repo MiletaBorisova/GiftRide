@@ -15,14 +15,14 @@ namespace GiftRide.Controllers
     {
         private readonly ICartService _cartService;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly ApplicationDbContext _context;
+        private readonly IPromoCodeService _promoCodeService;
 
 
-        public CartController(ICartService cartService, UserManager<ApplicationUser> userManager, ApplicationDbContext context)
+        public CartController(ICartService cartService, UserManager<ApplicationUser> userManager, IPromoCodeService promoCodeService)
         {
             _cartService = cartService;
             _userManager = userManager;
-            _context = context;
+            _promoCodeService = promoCodeService;
         }
 
         //pomoshtem metod za namirane na potrebitel
@@ -110,41 +110,31 @@ namespace GiftRide.Controllers
             return RedirectToAction("Index");
         }
 
+
+
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> ApplyPromoCode(string code)
         {
-            var userId = _userManager.GetUserId(User);
-            var cart = await _cartService.GetCartByUserIdAsync(userId);
+            var userId = GetUserId();           
+            int discount = await _promoCodeService.GetDiscountPercentAsync(code);
 
-            if (string.IsNullOrWhiteSpace(code))
+            if (discount == 0)
             {
-                cart.AppliedPromoDiscountPercent = 0m;
-                await _context.SaveChangesAsync();
-                TempData["PromoError"] = "Невалиден промо код.";
-                return RedirectToAction("Index");
-            }
-
-            var promo = await _context.PromoCodes
-                .FirstOrDefaultAsync(p => p.Code == code && p.IsActive);
-
-            if (promo == null)
-            {
-                cart.AppliedPromoDiscountPercent = 0m;
-                await _context.SaveChangesAsync();
+                
+                await _cartService.ApplyPromoCodeAsync(userId, 0);
                 TempData["PromoError"] = "Невалиден или изтекъл промо код.";
-                return RedirectToAction("Index");
             }
-
-
-            cart.AppliedPromoDiscountPercent = promo.DiscountPercent;
-            await _context.SaveChangesAsync();
-
-            TempData["PromoMessage"] = $"Промо кодът е приложен (-{promo.DiscountPercent}%)";
+            else
+            {
+                
+                await _cartService.ApplyPromoCodeAsync(userId, discount);
+                TempData["PromoMessage"] = $"Промо кодът е приложен (-{discount}%)";
+            }
 
             return RedirectToAction("Index");
         }
-      
+
 
     }
 }

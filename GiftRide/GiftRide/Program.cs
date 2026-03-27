@@ -44,6 +44,7 @@ namespace GiftRide
             builder.Services.AddTransient<IFavoriteService, FavoriteService>();
             builder.Services.AddTransient<IReservationService, ReservationService>();
             builder.Services.AddTransient<IChatService, ChatService>();
+            builder.Services.AddTransient<IPromoCodeService, PromoCodeService>();
            
 
 

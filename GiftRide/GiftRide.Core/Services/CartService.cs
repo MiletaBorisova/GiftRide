@@ -13,12 +13,14 @@ namespace GiftRide.Core.Services
     public class CartService:ICartService
     {
         private readonly ApplicationDbContext _context;
+        private readonly IPromoCodeService _promoCodeService;
         private readonly IProductService _productService;
 
-        public CartService(ApplicationDbContext context, IProductService productService)
+        public CartService(ApplicationDbContext context,IPromoCodeService promoCodeService, IProductService productService)
         {
             _context = context;
             _productService = productService;
+            _promoCodeService = promoCodeService;
         }
 
         public async Task<Cart> GetCartByUserIdAsync(string userId)
@@ -166,6 +168,14 @@ namespace GiftRide.Core.Services
 
             cart.AppliedPromoDiscountPercent = 0m;
 
+            await _context.SaveChangesAsync();
+        }
+
+
+        public async Task ApplyPromoCodeAsync(string userId, int discountPercent)
+        {
+            var cart = await GetCartByUserIdAsync(userId);
+            cart.AppliedPromoDiscountPercent = discountPercent;
             await _context.SaveChangesAsync();
         }
 
