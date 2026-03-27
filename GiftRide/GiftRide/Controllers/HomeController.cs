@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using GiftRide.Core.Contracts;
 using GiftRide.Models;
-using GiftRide.Models.Contact;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace GiftRide.Controllers
@@ -9,14 +9,14 @@ namespace GiftRide.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IContactService _contactService;
+        
 
 
 
-        public HomeController(ILogger<HomeController> logger, IContactService contactService)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            _contactService = contactService;
+            
         }
 
         public IActionResult Index()
@@ -28,39 +28,10 @@ namespace GiftRide.Controllers
         [HttpGet]
         public IActionResult Contacts()
         {
-            return View(new ContactFormVM());
+            return View();
         }
 
-        // POST
-        [HttpPost]
-        public IActionResult Contacts(ContactFormVM model)
-        {
-            
-            if (!ModelState.IsValid)
-            {
-                TempData["ErrorMessage"] = $"Формата не е попълнена!";
-                return View(model);
-            }
-
-            bool isSaved = _contactService.SaveMessage(
-                model.Name,
-                model.Email,
-                model.Phone,
-                model.Subject,
-                model.Message
-            );
-
-            if (isSaved)
-            {
-                TempData["SuccessMessage"] = $"Благодарим Ви, {model.Name}! Вашето съобщение е получено.";
-            }
-            else
-            {
-                TempData["ErrorMessage"] = "Възникна грешка при записването в базата данни.";
-            }
-
-            return RedirectToAction("Contacts");
-        }
+       
 
         public IActionResult Privacy()
         {
