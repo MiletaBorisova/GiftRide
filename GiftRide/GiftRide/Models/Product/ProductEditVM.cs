@@ -27,7 +27,6 @@ namespace GiftRide.Models.Product
         public int CategoryId { get; set; }
         public virtual List<CategoryPairVM> Categories { get; set; } = new List<CategoryPairVM>();
 
-
         [Display(Name = "Picture")]
         public string? Picture { get; set; }
 

@@ -10,6 +10,7 @@ using System.Security.Claims;
 
 namespace GiftRide.Controllers
 {
+    [Authorize]
     public class FavoritesController : Controller
     {
 

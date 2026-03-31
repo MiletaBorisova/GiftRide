@@ -58,13 +58,7 @@ namespace GiftRide.Controllers
             
             return View(cartVM);
         }
-        //public async Task<IActionResult> Index()
-        //{
-        //    var userId = GetUserId();
-        //    var cart = await _cartService.GetCartByUserIdAsync(userId);
-        //    ViewBag.Total = _cartService.CalculateTotalWithPromo(cart);
-        //    return View(cart);
-        //}
+
 
         public async Task<IActionResult> Add(int productId)
         {
