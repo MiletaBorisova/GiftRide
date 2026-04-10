@@ -38,16 +38,10 @@ namespace GiftRide.Controllers
                 Price = p.Price
             }).ToList();
 
-            // Подаваме изчистения модел към изгледа
+            
             return View(favoriteViewModels);
         }
 
-        //public async Task<IActionResult> Index()
-        //{
-        //    var userId = GetUserId();
-        //    var products = await _favoriteService.GetFavoritesAsync(userId);
-        //    return View(products);
-        //}
 
 
         public async Task<IActionResult> Add(int productId)

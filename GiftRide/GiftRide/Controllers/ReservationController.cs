@@ -65,16 +65,6 @@ namespace GiftRide.Controllers
             _reservationService.MakeReservation(voucherId, reservationDate, user.Id);
             return RedirectToAction("Create", "Reservation");
 
-            //if (success)
-            //{
-            //    TempData["Success"] = "Успешна резервация! Очаквайте потвърждение.";
-            //    return RedirectToAction("MyOrders", "Order");
-            //}
-            //else
-            //{
-            //    TempData["Error"] = "Грешка при резервацията. Проверете датата.";
-            //    return RedirectToAction("Create", "Reservation");
-            //}
         }
 
         [HttpPost]

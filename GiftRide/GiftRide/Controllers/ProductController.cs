@@ -41,7 +41,7 @@ namespace GiftRide.Controllers
                  {
                      Id = product.Id,
                      ProductName = product.ProductName,
-                     
+
                      ValidityId = product.ValidityId,
                      ValidityName = product.Validity.ValidityName,
                      CategoryId = product.CategoryId,
@@ -53,7 +53,27 @@ namespace GiftRide.Controllers
 
 
                  }).ToList();
-           
+
+            //List<ProductIndexVM> products = _productService.GetProductsTopThree()
+            //     .Select(product => new ProductIndexVM
+            //     {
+            //         Id = product.Id,
+            //         ProductName = product.ProductName,
+
+            //         ValidityId = product.ValidityId,
+            //         ValidityName = product.Validity.ValidityName,
+            //         CategoryId = product.CategoryId,
+            //         CategoryName = product.Category.CategoryName,
+            //         Picture = product.Picture,
+            //         Quantity = product.Quantity,
+            //         Price = product.Price,
+            //         Discount = product.Discount
+
+
+            //     }).ToList();
+
+
+
 
             switch (sort)
             {
@@ -73,9 +93,6 @@ namespace GiftRide.Controllers
                     products = products.OrderByDescending(p => p.Price).ToList();
                     break;
             }
-
-
-            
 
             return this.View(products);
         }
@@ -158,9 +175,7 @@ namespace GiftRide.Controllers
                 ProductName = product.ProductName,
                 Description = product.Description,
                 ValidityId = product.ValidityId,
-                //ValidityName = product.Validity.ValidityName,
                 CategoryId = product.CategoryId,
-                //CategoryName = product.Category.CategoryName,
                 Picture = product.Picture,
                 Quantity = product.Quantity,
                 Price = product.Price,
@@ -207,29 +222,6 @@ namespace GiftRide.Controllers
                     return this.RedirectToAction("Index");
                 }
             }
-
-            //            // 2. КРИТИЧНИЯТ ПРОБЛЕМ (Dropdown списъците)
-            //            В методите Create(POST) и Edit(POST), ако ModelState.IsValid върне false(например ако си забравил да напишеш име на продукт),
-            //            кодът отива най - долу на return View(product);.
-
-            //             Проблемът: В този момент списъците product.Validities и product.Categories са NULL(защото HTTP заявката не ги помни).
-            //             Това ще хвърли грешка в браузъра(NullReferenceException), когато се опита да зареди страницата отново.
-
-
-            // --- ВАЖНО: ПРЕЗАРЕЖДАМЕ СПИСЪЦИТЕ И ТУК ---
-            //product.Validities = _validityService.GetValidities()
-            //    .Select(b => new Models.Validity.ValidityPairVM()
-            //    {
-            //        Id = b.Id,
-            //        Name = b.ValidityName
-            //    }).ToList();
-
-            //product.Categories = _categoryService.GetCategories()
-            //    .Select(c => new Models.Category.CategoryPairVM()
-            //    {
-            //        Id = c.Id,
-            //        Name = c.CategoryName
-            //    }).ToList();
 
             return View(product);
 

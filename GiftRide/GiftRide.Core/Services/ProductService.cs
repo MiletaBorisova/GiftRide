@@ -86,8 +86,6 @@ namespace GiftRide.Core.Services
                 return false;
             }
             product.ProductName = name;
-            //product.ValidityId = validityId;
-            //product.CategoryId = categoryId;
             product.Description = description;
             product.Validity = _context.Validities.Find(validityId);
             product.Category = _context.Categories.Find(categoryId);
@@ -102,6 +100,16 @@ namespace GiftRide.Core.Services
         public bool HasOrders(int productId)
         {
             return _context.Orders.Any(x => x.ProductId == productId);
+        }
+
+        public List<Product> GetProductsTopThree()
+        {
+            return _context.Orders
+                .GroupBy(o => o.ProductId)
+                .OrderByDescending(g => g.Count())
+                .Take(3)
+                .Select(g => g.First().Product)
+                .ToList();
         }
     }
 }

@@ -16,6 +16,8 @@ namespace GiftRide.Core.Contracts
             int quantity, decimal price, decimal discount);
 
         List<Product> GetProducts();
+        List<Product> GetProductsTopThree();
+
        
         Product GetProductById(int productId);
         bool RemoveById(int productId);

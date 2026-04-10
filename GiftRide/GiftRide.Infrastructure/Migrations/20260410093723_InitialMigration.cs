@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace GiftRide.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitalMigration : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -56,20 +56,6 @@ namespace GiftRide.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Carts",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AppliedPromoDiscountPercent = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Carts", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Categories",
                 columns: table => new
                 {
@@ -80,6 +66,21 @@ namespace GiftRide.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FaqEntries",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Question = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Answer = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Keywords = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FaqEntries", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -215,6 +216,25 @@ namespace GiftRide.Infrastructure.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Carts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    AppliedPromoDiscountPercent = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Carts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Carts_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -364,6 +384,19 @@ namespace GiftRide.Infrastructure.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "FaqEntries",
+                columns: new[] { "Id", "Answer", "Keywords", "Question" },
+                values: new object[,]
+                {
+                    { 1, "Всички наши ваучери са с валидност, избрана от Вас при покупката (3, 6 или 12 месеца). Можете да видите срока на самия ваучер.", "валидност, срок, време, изтича, дата", "Каква е валидността?" },
+                    { 2, "Ваучерът се получава дигитално на имейла Ви веднага след успешна поръчка. Можете да го разпечатате или покажете от телефона.", "доставка, куриер, еконт, спиди, пристига, получа", "Как става доставката?" },
+                    { 3, "Да, съгласно закона имате право на отказ в рамките на 14 дни, ако ваучерът все още не е използван/резервиран.", "върна, връщане, отказ, рекламация, пари", "Мога ли да върна ваучер?" },
+                    { 4, "След като купите ваучер, влезте в списъка с поръчките си и използвайте бутона 'Резервация' срещу съответната поръчка.", "резерв, запаз, час, дата, използ", "Как да резервирам?" },
+                    { 5, "За да направите поръчка и да имате достъп до историята на Вашите ваучери и резервации, е необходимо да си създадете профил в GiftRide.", "регистрация, профил, акаунт, вход, login, register", "Нужна ли е регистрация?" },
+                    { 6, "След успешна покупка, всички Ваши ваучери се съхраняват в секция 'Моите поръчки' във Вашия профил, откъдето можете да ги разгледате по всяко време.", "къде, намират, ваучерите, поръчките, orders, история, изтегля", "Къде са ми ваучерите?" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "PromoCodes",
                 columns: new[] { "Id", "Code", "DiscountPercent", "IsActive" },
                 values: new object[,]
@@ -420,6 +453,13 @@ namespace GiftRide.Infrastructure.Migrations
                 name: "IX_CartItems_ProductId",
                 table: "CartItems",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Carts_UserId",
+                table: "Carts",
+                column: "UserId",
+                unique: true,
+                filter: "[UserId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Favorites_ProductId",
@@ -482,6 +522,9 @@ namespace GiftRide.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "CartItems");
+
+            migrationBuilder.DropTable(
+                name: "FaqEntries");
 
             migrationBuilder.DropTable(
                 name: "Favorites");

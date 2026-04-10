@@ -30,13 +30,7 @@ namespace GiftRide.Infrastructure.Data
         {
             base.OnModelCreating(builder);
 
-//            // Казваме на базата: Не трий ваучерите автоматично, ако се изтрие поръчка или продукт!
-//            Error Number:1785,State: 0,Class: 16
 
-             //Introducing FOREIGN KEY constraint 'FK_Vouchers_Products_ProductId' on table 'Vouchers' may cause cycles or multiple cascade paths.Specify
-             //ON DELETE NO ACTION or ON UPDATE NO ACTION, or modify other FOREIGN KEY constraints.
-
-            //Could not create constraint or index.See previous errors.
             builder.Entity<Voucher>()
                 .HasOne(v => v.Order)
                 .WithMany(o => o.Vouchers)
