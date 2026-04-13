@@ -54,26 +54,7 @@ namespace GiftRide.Controllers
 
                  }).ToList();
 
-            //List<ProductIndexVM> products = _productService.GetProductsTopThree()
-            //     .Select(product => new ProductIndexVM
-            //     {
-            //         Id = product.Id,
-            //         ProductName = product.ProductName,
-
-            //         ValidityId = product.ValidityId,
-            //         ValidityName = product.Validity.ValidityName,
-            //         CategoryId = product.CategoryId,
-            //         CategoryName = product.Category.CategoryName,
-            //         Picture = product.Picture,
-            //         Quantity = product.Quantity,
-            //         Price = product.Price,
-            //         Discount = product.Discount
-
-
-            //     }).ToList();
-
-
-
+           
 
             switch (sort)
             {

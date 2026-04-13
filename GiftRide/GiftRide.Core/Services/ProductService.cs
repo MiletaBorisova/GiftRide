@@ -102,14 +102,6 @@ namespace GiftRide.Core.Services
             return _context.Orders.Any(x => x.ProductId == productId);
         }
 
-        public List<Product> GetProductsTopThree()
-        {
-            return _context.Orders
-                .GroupBy(o => o.ProductId)
-                .OrderByDescending(g => g.Count())
-                .Take(3)
-                .Select(g => g.First().Product)
-                .ToList();
-        }
+       
     }
 }
